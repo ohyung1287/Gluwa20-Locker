@@ -11,112 +11,180 @@ import "../libs/ConversionModels.sol";
 contract Convertible is Initializable, Context {
     using SafeMath for uint256;
 
-    mapping (address => CommonTuples.AddressUint256Tuple) private _locks;    
-    mapping (address => ConversionModels.ExchangeRateModel) private _exchangeRate;  
-    uint256 private _baseTokenDecimal;
-    uint256 private _convertedTokenDecimal;
-    IERC20 private _baseToken;
+    mapping(address => mapping(IERC20 => uint256)) private _locks;
+    mapping(IERC20 => ConversionModels.TokenExchangeModel)
+        private _baseTokens;
+
+    mapping(IERC20 => uint8) private _baseTokenDecimals;
+    
+    uint8 private _convertedTokenDecimal;   
     IERC20 private _convertedToken;
 
-    event Locked(address indexed sender, uint256 _value);
-   
-    function ConvertibleInit(uint256 exchangeRate, address baseToken, uint256 baseTokenDecimal, address convertedToken, uint256 convertedTokenDecimal) internal initializer {
-        _exchangeRate = exchangeRate;
-        _baseToken = IERC20(baseToken);
-        _baseTokenDecimal = baseTokenDecimal;
+    event Locked(address indexed sender, IERC20 indexed token, uint256 _value);
+
+    function ConvertibleInit(        
+        address convertedToken,
+        uint8 convertedTokenDecimal
+    ) internal initializer {       
         _convertedToken = IERC20(convertedToken);
         _convertedTokenDecimal = convertedTokenDecimal;
     }
 
-    function exchangeRate() public view returns (uint256) {
-        return _exchangeRate;
+    function getTokenExchangeDetails(IERC20 token)
+        public
+        view
+        returns (ConversionModels.TokenExchangeModel memory)
+    {
+        return _baseTokens[token];
     }
 
-    function balanceOfBaseToken(address account) public view returns (uint256) {        
-        return _baseToken.balanceOf(account);
+    function getLocked(address account, IERC20 token)
+        public
+        view
+        returns (uint256)
+    {
+        return _locks[account][token];
     }
 
-    function getLocked(address account) public view returns (uint256) {        
-        return _locks[account];
-    }
-
-    function _setExchangeRate(uint256 newExchangeRate) internal returns (bool) {
-        _exchangeRate = newExchangeRate;
+    function _setTokenExchange(
+        IERC20 token,
+        uint8 decimals,
+        uint32 newExchangeRate,
+        uint32 newExchangeRateDecimalPlaceBase
+    ) internal returns (bool) {
+        _baseTokenDecimals[token] = decimals;
+        _baseTokens[token].rate = newExchangeRate;
+        _baseTokens[token].decimalPlaceBase = newExchangeRateDecimalPlaceBase;
         return true;
     }
 
-    function lock(uint256 amount) public returns (bool) {        
-        return _lockFrom(_msgSender(), amount);
+    function lock(IERC20 token, uint256 amount) public returns (bool) {
+        return _lockFrom(_msgSender(), token, amount);
     }
 
-    function _lockFrom(address account, uint256 amount) internal returns (bool) {        
-        uint256 tokenBalance = balanceOfBaseToken(account);
+    function _lockFrom(
+        address account,
+        IERC20 token,
+        uint256 amount
+    ) internal returns (bool) {
+        uint256 tokenBalance = token.balanceOf(account);
 
-        require(tokenBalance >= amount, "Convertible: The locked amount is higher than the balance amount");
-        require(_baseToken.transferFrom(account, address(this), amount), "Convertible: Can't lock the token amount");
-          
-        _locks[account] =  _locks[account].add(amount);
+        require(
+            _baseTokens[token].rate > 0,
+            "Convertible: The base token is not supported."
+        );
+        require(
+            tokenBalance >= amount,
+            "Convertible: The locked amount is higher than the balance amount"
+        );
+        require(
+            token.transferFrom(account, address(this), amount),
+            "Convertible: Can't lock the token amount"
+        );
 
-        emit Locked(account, amount);
+        _locks[account][token] = _locks[account][token].add(amount);
+
+        emit Locked(account, token, amount);
 
         return true;
     }
 
-    function _release(address account, uint256 amount) internal returns (uint256) {        
-        uint256 lockedAmount = _locks[account];        
-        require(amount <= lockedAmount, "Convertible: The released amount is higher than the locked amount");        
-          
-        _locks[account] = lockedAmount - amount;
+    function _release(
+        address account,
+        IERC20 token,
+        uint256 amount
+    ) internal returns (uint256) {
+        uint256 lockedAmount = _locks[account][token];
+        require(
+            amount <= lockedAmount,
+            "Convertible: The released amount is higher than the locked amount"
+        );
+
+        _locks[account][token] = lockedAmount - amount;
 
         return amount;
     }
 
-    function _releaseAll(address account) internal returns (uint256) {        
-        uint256 lockedAmount = _locks[account];      
-        require(lockedAmount > 0, "Convertible: Nothing to release");        
-
-        _locks[account] = 0;
-
-        return lockedAmount;
-    }
-
-    function withdraw(uint256 amount) public returns (bool) {
+    function withdraw(IERC20 token, uint256 amount) public returns (bool) {
         address sender = _msgSender();
-        uint256 lockedAmount = _locks[sender];
+        uint256 lockedAmount = _locks[sender][token];
 
-        require(lockedAmount >= amount, "Convertible: The withdrawal amount is higher than the locked amount");
+        require(
+            lockedAmount >= amount,
+            "Convertible: The withdrawal amount is higher than the locked amount"
+        );
 
-        _locks[sender] -= amount;
-        require(_baseToken.transfer(sender, amount), "Convertible: Can't lock the token amount");      
+        _locks[sender][token] -= amount;
+        require(
+            token.transfer(sender, amount),
+            "Convertible: Can't lock the token amount"
+        );
 
         return true;
     }
 
-    function withdrawAll() public returns (bool) {
-        address sender = _msgSender();
-        uint256 lockedAmount = _locks[sender];
-        
-        _locks[sender] = 0;
-        require(_baseToken.transfer(sender, lockedAmount), "Convertible: Can't withdraw all the token amount");
-
-        return true;
+    function _calculateConversion(IERC20 token, uint256 amount)
+        internal
+        view
+        returns (uint256)
+    {
+        ConversionModels.TokenExchangeModel storage rateModel = _baseTokens[token];
+        require(
+            rateModel.rate > 0,
+            "Convertible: The base token is not supported."
+        );
+        return
+            _decimalConversionFromBaseToken(
+                _baseTokenDecimals[token],
+                _convertedTokenDecimal,
+                amount.mul(_baseTokens[token].rate).div(_baseTokens[token].decimalPlaceBase)
+            );
     }
 
-    function _calculateConversion(uint256 amount) internal view returns (uint256) {      
-        return _decimalConversionFromBaseToken(amount.mul(_exchangeRate));  
+    //gas saving comparison
+    function _calculateConversionV2(IERC20 token, uint256 amount)
+        internal
+        view
+        returns (uint256)
+    {
+        require(
+            _baseTokens[token].rate > 0,
+            "Convertible: The base token is not supported."
+        );
+
+        return
+            _decimalConversionFromBaseToken(
+                _baseTokenDecimals[token],
+                _convertedTokenDecimal,
+                amount.mul(_baseTokens[token].rate).div(
+                    _baseTokens[token].decimalPlaceBase
+                )
+            );
     }
 
-    function _decimalConversionFromBaseToken(uint256 amount) internal view returns (uint256) {
-        if (_baseTokenDecimal < _convertedTokenDecimal) {
-            return amount.mul(10**(_convertedTokenDecimal - _baseTokenDecimal));
+    function _decimalConversionFromBaseToken(uint8 baseTokenDecimal, uint8 convertedTokenDecimal, uint256 amount)
+        internal
+        pure
+        returns (uint256)
+    {
+        if (baseTokenDecimal < convertedTokenDecimal) {
+            return amount.mul(10**(convertedTokenDecimal - baseTokenDecimal));
+        } else {
+            return amount.div(10**(baseTokenDecimal - convertedTokenDecimal));
         }
-        else{
-            return amount.div(10**(_baseTokenDecimal- _convertedTokenDecimal));
-        }
     }
 
-    function info() external view returns (uint256, IERC20, uint256, IERC20, uint256) {
-        return (_exchangeRate, _baseToken, _baseTokenDecimal, _convertedToken, _convertedTokenDecimal);
+    function info()
+        external
+        view
+        returns (         
+            IERC20,
+            uint8
+        )
+    {
+        return (              
+            _convertedToken,
+            _convertedTokenDecimal
+        );
     }
-
 }

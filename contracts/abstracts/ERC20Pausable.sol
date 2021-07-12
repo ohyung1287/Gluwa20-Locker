@@ -23,15 +23,7 @@ contract ERC20Pausable is Context {
     event Unpaused(address account);
 
     bool private _paused;
-
-    /**
-     * @dev Initializes the contract in unpaused state. Assigns the Pauser role
-     * to the deployer.
-     */
-    constructor () internal {
-        _paused = false;
-    }
-
+ 
     /**
      * @dev Returns true if the contract is paused, and false otherwise.
      */

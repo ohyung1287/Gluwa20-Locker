@@ -1,11 +1,13 @@
 {
   "dependencies": {
     "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "@openzeppelin/contracts": "^4.1.0",
-    "hardhat": "^2.3.3"
+    "@openzeppelin/contracts": "^4.1.0"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.11",
-    "chai": "^4.3.4"
+    "chai": "^4.3.4",
+    "hardhat": "^2.4.3",
+    "hardhat-gas-reporter": "^1.0.4",
+    "solidity-coverage": "^0.7.16"
   }
 }
