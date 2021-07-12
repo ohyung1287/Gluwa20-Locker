@@ -75,14 +75,22 @@ contract ExtendedERC20 is Initializable, Context, IERC20 {
     /**
      * @dev See {IERC20-totalSupply}.
     */   
+<<<<<<< HEAD
     function totalSupply() public override view returns (uint256) {
+=======
+    function totalSupply() public view returns (uint256) {
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         return _totalSupply;
     }
 
     /**
      * @dev See {IERC20-balanceOf}.
      */
+<<<<<<< HEAD
     function balanceOf(address account) public override view returns (uint256) {
+=======
+    function balanceOf(address account) public view returns (uint256) {
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         return _balances[account];
     }
 
@@ -94,7 +102,11 @@ contract ExtendedERC20 is Initializable, Context, IERC20 {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
+<<<<<<< HEAD
     function transfer(address recipient, uint256 amount) public override returns (bool) {
+=======
+    function transfer(address recipient, uint256 amount) public returns (bool) {
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
@@ -102,7 +114,11 @@ contract ExtendedERC20 is Initializable, Context, IERC20 {
     /**
      * @dev See {IERC20-allowance}.
      */
+<<<<<<< HEAD
     function allowance(address owner, address spender) public override view returns (uint256) {
+=======
+    function allowance(address owner, address spender) public view returns (uint256) {
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         return _allowances[owner][spender];
     }
 
@@ -113,7 +129,11 @@ contract ExtendedERC20 is Initializable, Context, IERC20 {
      *
      * - `spender` cannot be the zero address.
      */
+<<<<<<< HEAD
     function approve(address spender, uint256 amount) public override returns (bool) {
+=======
+    function approve(address spender, uint256 amount) public returns (bool) {
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         _approve(_msgSender(), spender, amount);
         return true;
     }
@@ -130,7 +150,11 @@ contract ExtendedERC20 is Initializable, Context, IERC20 {
      * - the caller must have allowance for `sender`'s tokens of at least
      * `amount`.
      */
+<<<<<<< HEAD
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
+=======
+    function transferFrom(address sender, address recipient, uint256 amount) public returns (bool) {
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         _transfer(sender, recipient, amount);
         
         uint256 currentAllowance = _allowances[sender][_msgSender()];

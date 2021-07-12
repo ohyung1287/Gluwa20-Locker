@@ -105,6 +105,7 @@ contract Gluwacoin {
      * - the `sender` must have a balance of at least the sum of `amount` and `fee`.
      * - the `nonce` is only used once per `sender`.
      */
+<<<<<<< HEAD
     function transfer(
         address sender,
         address recipient,
@@ -126,11 +127,21 @@ contract Gluwacoin {
             nonce,
             sig
         );
+=======
+    function transfer(address sender, address recipient, uint256 amount,  uint256 fee, uint256 nonce, bytes memory sig)
+    public whenNotPaused returns (bool success) {
+        _useNonce(sender, nonce);
+        uint256 totalAmount = amount + fee;
+        _beforeTokenTransfer(sender, totalAmount);        
+
+        _validateSignature(address(this), sender, recipient, amount, fee, nonce,sig);
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
 
         _collect(sender, fee);
         _transfer(sender, recipient, amount);
 
         return true;
+<<<<<<< HEAD
     }
 
     function transfer(address recipient, uint256 amount)
@@ -143,11 +154,23 @@ contract Gluwacoin {
         _beforeTokenTransfer(sender, totalAmount);
 
         _collect(sender, _fee);
+=======
+    }  
+
+    function transfer(address recipient, uint256 amount) public whenNotPaused returns(bool)
+    {
+        uint256 totalAmount = amount + _fee;
+        address sender = _msgSender();
+        _beforeTokenTransfer(sender, totalAmount);   
+
+        _collect(sender,_fee);
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         _transfer(sender, recipient, amount);
 
         return true;
     }
 
+<<<<<<< HEAD
     function transferFrom(
         address sender,
         address recipient,
@@ -163,6 +186,21 @@ contract Gluwacoin {
         _burn(_msgSender(), amount);
         return true;
     }
+=======
+    function transferFrom(address sender, address recipient, uint256 amount) public whenNotPaused returns(bool)
+    {
+        uint256 totalAmount = amount + _fee;
+        _beforeTokenTransfer(sender, totalAmount);    
+        _collect(sender,_fee);    
+        return ExtendedERC20.transferFrom(sender, recipient, amount);
+    }
+
+    function burn(uint256 amount) public returns(bool)
+    {   
+        _burn( _msgSender(), amount);
+        return true;
+    } 
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
 
     /** @dev check the amount of available tokens of sender to transfer.
      *
@@ -170,11 +208,16 @@ contract Gluwacoin {
      * - Total balance must be equal or higher than the transferring amount.
      * - Unreserving (the amount of tokens are not put as a reserve) must be equal or higher than the transferring amount.
      */
+<<<<<<< HEAD
     function _beforeTokenTransfer(address from, uint256 amount) internal view {
         require(
             balanceOf(from) >= amount,
             "ERC20WithSafeTransfer: insufficient balance"
         );
+=======
+    function _beforeTokenTransfer(address from, uint256 amount) internal view { 
+       require(balanceOf(from) >= amount, "ERC20WithSafeTransfer: insufficient balance");          
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
     }
 
     /** @dev Collects `fee` from the sender.
@@ -184,4 +227,8 @@ contract Gluwacoin {
     function _collect(address sender, uint256 amount) internal {
         _transfer(sender, _getFeeCollectionAddress(), amount);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
