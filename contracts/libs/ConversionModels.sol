@@ -1,4 +1,4 @@
-pragma solidity >=0.5.0;
+pragma solidity >=0.8.6;
 
 /** @title Library functions used by contracts within this ecosystem.*/
 library ConversionModels {   

@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.5;
+pragma solidity >=0.8.6;
 
-import "@openzeppelin/contracts/utils/Context.sol";
-import "./abstracts/ETHLessTransfer.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import "./abstracts/ERC20Reservable.sol";
 import "./abstracts/ERC20Pausable.sol";
+import "./abstracts/Convertible.sol";
+import "./abstracts/TransactionFee.sol";
+import "./abstracts/ETHlessTransfer.sol";
 
 /**
  * @dev Extension of {ERC20} that adds a set of accounts with the {MinterRole},
@@ -11,12 +14,23 @@ import "./abstracts/ERC20Pausable.sol";
  *
  * At construction, the deployer of the contract is the only minter.
  */
-contract Gluwacoin {
-    function initialize()
-        public
-        initializer
-    {
-        ConvertibleInit(address(this), decimals);
+contract Gluwacoin is
+    ContextUpgradeable,
+    ERC20Pausable,
+    ERC20Reservable,
+    Convertible,
+    TransactionFee,
+    ETHlessTransfer
+{
+    function initialize(uint256 fee) public initializer {
+        __Context_init_unchained();
+        __AccessControlEnumerable_init_unchained();
+        __Convertible_init_unchained(address(this), decimals());
+        __ERC20Reservable_init_unchained();
+        __ERC20Pausable_init_unchained();
+        __ERC20ETHless_init_unchained();
+        __TransactionFee_init_unchained(_msgSender(), fee);
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
     function _convert(
@@ -31,7 +45,11 @@ contract Gluwacoin {
         return true;
     }
 
-    function setFee(uint256 amount) external onlyAdmin returns (bool) {
+    function setFee(uint256 amount)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (bool)
+    {
         _setFee(amount);
         return true;
     }
@@ -41,7 +59,7 @@ contract Gluwacoin {
         uint8 decimals,
         uint32 newExchangeRate,
         uint32 newExchangeRateDecimalPlaceBase
-    ) external onlyAdmin returns (bool) {
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
         return
             _setTokenExchange(
                 token,
@@ -55,13 +73,13 @@ contract Gluwacoin {
         address account,
         IERC20 token,
         uint256 amount
-    ) external onlyAdmin returns (bool) {
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
         return _lockFrom(account, token, amount);
     }
 
     function convertAllFrom(address account, IERC20 token)
         external
-        onlyAdmin
+        onlyRole(DEFAULT_ADMIN_ROLE)
         returns (bool)
     {
         return _convertAll(account, token);
@@ -75,7 +93,7 @@ contract Gluwacoin {
         address account,
         IERC20 token,
         uint256 amount
-    ) external onlyAdmin returns (bool) {
+    ) external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
         return _convert(account, token, amount);
     }
 
@@ -83,11 +101,11 @@ contract Gluwacoin {
         return _convert(_msgSender(), token, amount);
     }
 
-    function pause() external onlyAdmin returns (bool) {
+    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
         return super._pause();
     }
 
-    function unpause() external onlyAdmin returns (bool) {
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
         return super._unpause();
     }
 
@@ -105,130 +123,64 @@ contract Gluwacoin {
      * - the `sender` must have a balance of at least the sum of `amount` and `fee`.
      * - the `nonce` is only used once per `sender`.
      */
-<<<<<<< HEAD
     function transfer(
         address sender,
         address recipient,
         uint256 amount,
         uint256 fee,
         uint256 nonce,
-        bytes memory sig
-    ) public whenNotPaused returns (bool success) {
-        _useNonce(sender, nonce);
-        uint256 totalAmount = amount + fee;
-        _beforeTokenTransfer(sender, totalAmount);
-
-        _validateSignature(
-            address(this),
-            sender,
-            recipient,
-            amount,
-            fee,
-            nonce,
-            sig
-        );
-=======
-    function transfer(address sender, address recipient, uint256 amount,  uint256 fee, uint256 nonce, bytes memory sig)
-    public whenNotPaused returns (bool success) {
-        _useNonce(sender, nonce);
-        uint256 totalAmount = amount + fee;
-        _beforeTokenTransfer(sender, totalAmount);        
-
-        _validateSignature(address(this), sender, recipient, amount, fee, nonce,sig);
->>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
-
-        _collect(sender, fee);
-        _transfer(sender, recipient, amount);
-
-        return true;
-<<<<<<< HEAD
+        bytes calldata sig
+    ) external whenNotPaused returns (bool success) {
+        return _transfer(sender, recipient, amount, fee, nonce, sig);
     }
 
     function transfer(address recipient, uint256 amount)
         public
+        override
         whenNotPaused
         returns (bool)
     {
         uint256 totalAmount = amount + _fee;
         address sender = _msgSender();
-        _beforeTokenTransfer(sender, totalAmount);
-
+        _beforeTokenTransfer(sender, recipient, totalAmount);
         _collect(sender, _fee);
-=======
-    }  
-
-    function transfer(address recipient, uint256 amount) public whenNotPaused returns(bool)
-    {
-        uint256 totalAmount = amount + _fee;
-        address sender = _msgSender();
-        _beforeTokenTransfer(sender, totalAmount);   
-
-        _collect(sender,_fee);
->>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
         _transfer(sender, recipient, amount);
 
         return true;
     }
 
-<<<<<<< HEAD
     function transferFrom(
         address sender,
         address recipient,
         uint256 amount
-    ) public whenNotPaused returns (bool) {
+    ) public override whenNotPaused returns (bool) {
         uint256 totalAmount = amount + _fee;
-        _beforeTokenTransfer(sender, totalAmount);
+        _beforeTokenTransfer(sender, recipient, totalAmount);
         _collect(sender, _fee);
-        return ExtendedERC20.transferFrom(sender, recipient, amount);
+        _transfer(sender, recipient, amount);
+        return true;
     }
 
     function burn(uint256 amount) public returns (bool) {
         _burn(_msgSender(), amount);
         return true;
     }
-=======
-    function transferFrom(address sender, address recipient, uint256 amount) public whenNotPaused returns(bool)
-    {
-        uint256 totalAmount = amount + _fee;
-        _beforeTokenTransfer(sender, totalAmount);    
-        _collect(sender,_fee);    
-        return ExtendedERC20.transferFrom(sender, recipient, amount);
-    }
-
-    function burn(uint256 amount) public returns(bool)
-    {   
-        _burn( _msgSender(), amount);
-        return true;
-    } 
->>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
 
     /** @dev check the amount of available tokens of sender to transfer.
-     *
+     * Must override all the parent's functions
      * Do 2 checks:
      * - Total balance must be equal or higher than the transferring amount.
      * - Unreserving (the amount of tokens are not put as a reserve) must be equal or higher than the transferring amount.
      */
-<<<<<<< HEAD
-    function _beforeTokenTransfer(address from, uint256 amount) internal view {
-        require(
-            balanceOf(from) >= amount,
-            "ERC20WithSafeTransfer: insufficient balance"
-        );
-=======
-    function _beforeTokenTransfer(address from, uint256 amount) internal view { 
-       require(balanceOf(from) >= amount, "ERC20WithSafeTransfer: insufficient balance");          
->>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal override(ETHlessTransfer, ERC20Reservable) {
+        ETHlessTransfer._beforeTokenTransfer(from, to, amount);
+        ERC20Reservable._beforeTokenTransfer(from, to, amount);
     }
 
-    /** @dev Collects `fee` from the sender.
-     *
-     * Emits a {Transfer} event.
-     */
-    function _collect(address sender, uint256 amount) internal {
-        _transfer(sender, _getFeeCollectionAddress(), amount);
-    }
-<<<<<<< HEAD
+    uint256[50] private __gap;
 }
-=======
-}
->>>>>>> d9f449da94a2bc79cae8fb11dbab606bf56ef96f

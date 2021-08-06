@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.8.5;
+pragma solidity >=0.8.6;
 
-import "@openzeppelin/contracts/utils/Context.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 
 /**
  * @dev ERC20 token with pausable token transfers, minting and burning.
@@ -11,7 +11,18 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * period, or having an emergency switch for freezing all token transfers in the
  * event of a large bug.
  */
-contract ERC20Pausable is Context {
+contract ERC20Pausable is ContextUpgradeable {
+
+    function __ERC20Pausable_init() internal initializer {       
+        __Context_init_unchained();
+        __ERC20Pausable_init_unchained();
+    }
+
+    function __ERC20Pausable_init_unchained() internal initializer {       
+        
+    }
+
+
     /**
      * @dev Emitted when the pause is triggered by a pauser (`account`).
      */
@@ -23,7 +34,7 @@ contract ERC20Pausable is Context {
     event Unpaused(address account);
 
     bool private _paused;
- 
+
     /**
      * @dev Returns true if the contract is paused, and false otherwise.
      */
@@ -64,5 +75,6 @@ contract ERC20Pausable is Context {
         emit Unpaused(_msgSender());
         return _paused;
     }
-    
+
+    uint256[50] private __gap;
 }
