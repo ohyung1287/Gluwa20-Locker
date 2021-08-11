@@ -1,44 +1,31 @@
 pragma solidity >=0.8.6;
 
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import "./ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../libs/CommonTuples.sol";
-import "../libs/ConversionModels.sol";
+import "../libs/GluwacoinModel.sol";
 
 contract Convertible is Initializable, ContextUpgradeable {
-
-    mapping(address => mapping(IERC20 => uint256)) private _locks;
-    mapping(IERC20 => ConversionModels.TokenExchangeModel)
-        private _baseTokens;
+    mapping(IERC20 => GluwacoinModel.TokenExchangeModel) private _baseTokens;
 
     mapping(IERC20 => uint8) private _baseTokenDecimals;
-    
-    uint8 private _convertedTokenDecimal;   
-    IERC20 private _convertedToken;
+
+    uint8 private _convertedTokenDecimal;
+
+    mapping(address => mapping(IERC20 => uint256)) internal _locks;
 
     event Locked(address indexed sender, IERC20 indexed token, uint256 _value);
 
-    function __Convertible_init(        
-        address convertedToken,
+    function __Convertible_init_unchained(
         uint8 convertedTokenDecimal
-    ) internal initializer {       
-        __Context_init_unchained();
-        __Convertible_init_unchained(convertedToken,convertedTokenDecimal);    
-    }
-
-    function __Convertible_init_unchained(        
-        address convertedToken,
-        uint8 convertedTokenDecimal
-    ) internal initializer {       
-        _convertedToken = IERC20(convertedToken);
+    ) internal initializer {
         _convertedTokenDecimal = convertedTokenDecimal;
     }
 
     function getTokenExchangeDetails(IERC20 token)
         public
         view
-        returns (ConversionModels.TokenExchangeModel memory)
+        returns (GluwacoinModel.TokenExchangeModel memory)
     {
         return _baseTokens[token];
     }
@@ -72,16 +59,11 @@ contract Convertible is Initializable, ContextUpgradeable {
         IERC20 token,
         uint256 amount
     ) internal returns (bool) {
-        uint256 tokenBalance = token.balanceOf(account);
-
         require(
             _baseTokens[token].rate > 0,
             "Convertible: The base token is not supported."
         );
-        require(
-            tokenBalance >= amount,
-            "Convertible: The locked amount is higher than the balance amount"
-        );
+        
         require(
             token.transferFrom(account, address(this), amount),
             "Convertible: Can't lock the token amount"
@@ -98,31 +80,16 @@ contract Convertible is Initializable, ContextUpgradeable {
         address account,
         IERC20 token,
         uint256 amount
-    ) internal returns (uint256) {
-        uint256 lockedAmount = _locks[account][token];
-        require(
-            amount <= lockedAmount,
-            "Convertible: The released amount is higher than the locked amount"
-        );
-
-        _locks[account][token] = lockedAmount - amount;
-
+    ) internal returns (uint256) {        
+        _locks[account][token] -= amount;
         return amount;
     }
-
-    function withdraw(IERC20 token, uint256 amount) public returns (bool) {
-        address sender = _msgSender();
-        uint256 lockedAmount = _locks[sender][token];
-
+    
+    function withdraw(IERC20 token, uint256 amount) public returns (bool) {    
+        _locks[_msgSender()][token] -= amount;
         require(
-            lockedAmount >= amount,
-            "Convertible: The withdrawal amount is higher than the locked amount"
-        );
-
-        _locks[sender][token] -= amount;
-        require(
-            token.transfer(sender, amount),
-            "Convertible: Can't lock the token amount"
+            token.transfer(_msgSender(), amount),
+            "Convertible: Can't withdraw the token amount"
         );
 
         return true;
@@ -133,7 +100,9 @@ contract Convertible is Initializable, ContextUpgradeable {
         view
         returns (uint256)
     {
-        ConversionModels.TokenExchangeModel storage rateModel = _baseTokens[token];
+        GluwacoinModel.TokenExchangeModel storage rateModel = _baseTokens[
+            token
+        ];
         require(
             rateModel.rate > 0,
             "Convertible: The base token is not supported."
@@ -142,54 +111,22 @@ contract Convertible is Initializable, ContextUpgradeable {
             _decimalConversionFromBaseToken(
                 _baseTokenDecimals[token],
                 _convertedTokenDecimal,
-                (amount * _baseTokens[token].rate)/(_baseTokens[token].decimalPlaceBase)
+                (amount * _baseTokens[token].rate) /
+                    (_baseTokens[token].decimalPlaceBase)
             );
-    }
+    }    
 
-    //gas saving comparison
-    function _calculateConversionV2(IERC20 token, uint256 amount)
-        internal
-        view
-        returns (uint256)
-    {
-        require(
-            _baseTokens[token].rate > 0,
-            "Convertible: The base token is not supported."
-        );
-
-        return
-            _decimalConversionFromBaseToken(
-                _baseTokenDecimals[token],
-                _convertedTokenDecimal,
-                (amount * _baseTokens[token].rate) / _baseTokens[token].decimalPlaceBase              
-            );
-    }
-
-    function _decimalConversionFromBaseToken(uint8 baseTokenDecimal, uint8 convertedTokenDecimal, uint256 amount)
-        internal
-        pure
-        returns (uint256)
-    {
+    function _decimalConversionFromBaseToken(
+        uint8 baseTokenDecimal,
+        uint8 convertedTokenDecimal,
+        uint256 amount
+    ) internal pure returns (uint256) {
         if (baseTokenDecimal < convertedTokenDecimal) {
             return amount * (10**(convertedTokenDecimal - baseTokenDecimal));
         } else {
             return amount / (10**(baseTokenDecimal - convertedTokenDecimal));
         }
-    }
-
-    function info()
-        external
-        view
-        returns (         
-            IERC20,
-            uint8
-        )
-    {
-        return (              
-            _convertedToken,
-            _convertedTokenDecimal
-        );
-    }
+    }    
 
     uint256[50] private __gap;
 }

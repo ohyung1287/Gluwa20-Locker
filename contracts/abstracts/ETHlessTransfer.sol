@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.6;
 
-import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "./AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "./ERC20Upgradeable.sol";
 import "../libs/GluwacoinModel.sol";
 
 import "../libs/Validate.sol";
@@ -25,16 +25,11 @@ contract ETHlessTransfer is
     // collects transaction relay fee
     bytes32 public constant RELAYER_ROLE = keccak256("RELAYER_ROLE");
 
-    function __ERC20ETHless_init(string memory name, string memory symbol)
-        internal
-        initializer
-    {
-        __ERC20_init_unchained(name, symbol);
-        __AccessControlEnumerable_init_unchained();
-        __ERC20ETHless_init_unchained();
-    }
-
-    function __ERC20ETHless_init_unchained() internal initializer {        
+    function __ERC20ETHless_init_unchained(
+        string memory name_,
+        string memory symbol_
+    ) internal initializer {
+        __ERC20_init_unchained(name_, symbol_);
         _setupRole(RELAYER_ROLE, _msgSender());
     }
 
@@ -108,7 +103,6 @@ contract ETHlessTransfer is
         address to,
         uint256 amount
     ) internal virtual override(ERC20Upgradeable) {
-        require(balanceOf(from) >= amount, "ERC20: insufficient balance");
         ERC20Upgradeable._beforeTokenTransfer(from, to, amount);
     }
 

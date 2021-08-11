@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.6;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "./ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../libs/GluwacoinModel.sol";
 import "../libs/Validate.sol";
@@ -35,16 +35,7 @@ abstract contract ERC20Reservable is Initializable, ERC20Upgradeable {
     mapping (address => mapping(uint256 => Reservation)) private _reserved;
 
     // Total amount of reserved balance for address
-    mapping (address => uint256) private _totalReserved;
-
-    function __ERC20Reservable_init(string memory name, string memory symbol) internal
-    initializer {
-        __ERC20_init_unchained(name, symbol);
-        __ERC20Reservable_init_unchained();
-    }
-
-    function __ERC20Reservable_init_unchained() internal initializer {
-    }
+    mapping (address => uint256) private _totalReserved; 
 
     function getReservation(address sender, uint256 nonce) external view
         returns (
@@ -153,9 +144,8 @@ abstract contract ERC20Reservable is Initializable, ERC20Upgradeable {
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override (ERC20Upgradeable) {
-        if (from != address(0)) {
-            require(_unreservedBalance(from) >= amount, "ERC20Reservable: transfer amount exceeds unreserved balance");
-        }
+        
+        require(_unreservedBalance(from) >= amount, "ERC20Reservable: transfer amount exceeds unreserved balance");      
 
         super._beforeTokenTransfer(from, to, amount);
     }

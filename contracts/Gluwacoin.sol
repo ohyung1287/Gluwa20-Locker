@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.6;
 
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import "./abstracts/ContextUpgradeable.sol";
 import "./abstracts/ERC20Reservable.sol";
-import "./abstracts/ERC20Pausable.sol";
 import "./abstracts/Convertible.sol";
-import "./abstracts/TransactionFee.sol";
 import "./abstracts/ETHlessTransfer.sol";
 
 /**
@@ -16,42 +14,17 @@ import "./abstracts/ETHlessTransfer.sol";
  */
 contract Gluwacoin is
     ContextUpgradeable,
-    ERC20Pausable,
     ERC20Reservable,
     Convertible,
-    TransactionFee,
     ETHlessTransfer
 {
-    function initialize(uint256 fee) public initializer {
-        __Context_init_unchained();
-        __AccessControlEnumerable_init_unchained();
-        __Convertible_init_unchained(address(this), decimals());
-        __ERC20Reservable_init_unchained();
-        __ERC20Pausable_init_unchained();
-        __ERC20ETHless_init_unchained();
-        __TransactionFee_init_unchained(_msgSender(), fee);
-        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-    }
-
-    function _convert(
-        address account,
-        IERC20 token,
-        uint256 amount
-    ) private returns (bool) {
-        return true;
-    }
-
-    function _convertAll(address account, IERC20 token) private returns (bool) {
-        return true;
-    }
-
-    function setFee(uint256 amount)
+    function initialize(string memory name_, string memory symbol_)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
-        returns (bool)
+        initializer
     {
-        _setFee(amount);
-        return true;
+        __ERC20ETHless_init_unchained(name_, symbol_);
+        __Convertible_init_unchained(decimals());
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
     function setTokenExchange(
@@ -82,11 +55,13 @@ contract Gluwacoin is
         onlyRole(DEFAULT_ADMIN_ROLE)
         returns (bool)
     {
-        return _convertAll(account, token);
-    }
+        uint256 lockedAmount = _locks[account][token];
+        _release(account, token, lockedAmount);
 
-    function convertAll(IERC20 token) external returns (bool) {
-        return _convertAll(_msgSender(), token);
+        uint256 convertedAmount = _calculateConversion(token, lockedAmount);
+        _mint(account, convertedAmount);
+
+        return true;
     }
 
     function convertFrom(
@@ -101,68 +76,16 @@ contract Gluwacoin is
         return _convert(_msgSender(), token, amount);
     }
 
-    function pause() external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
-        return super._pause();
-    }
-
-    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) returns (bool) {
-        return super._unpause();
-    }
-
-    /**
-     * @dev Moves `amount` tokens from the `sender`'s account to `recipient`
-     * and moves `fee` tokens from the `sender`'s account to a relayer's address.
-     *
-     * Returns a boolean value indicating whether the operation succeeded.
-     *
-     * Emits two {Transfer} events.
-     *
-     * Requirements:
-     *
-     * - `recipient` cannot be the zero address.
-     * - the `sender` must have a balance of at least the sum of `amount` and `fee`.
-     * - the `nonce` is only used once per `sender`.
-     */
-    function transfer(
-        address sender,
-        address recipient,
-        uint256 amount,
-        uint256 fee,
-        uint256 nonce,
-        bytes calldata sig
-    ) external whenNotPaused returns (bool success) {
-        return _transfer(sender, recipient, amount, fee, nonce, sig);
-    }
-
-    function transfer(address recipient, uint256 amount)
-        public
-        override
-        whenNotPaused
-        returns (bool)
-    {
-        uint256 totalAmount = amount + _fee;
-        address sender = _msgSender();
-        _beforeTokenTransfer(sender, recipient, totalAmount);
-        _collect(sender, _fee);
-        _transfer(sender, recipient, amount);
-
-        return true;
-    }
-
-    function transferFrom(
-        address sender,
-        address recipient,
+    function _convert(
+        address account,
+        IERC20 token,
         uint256 amount
-    ) public override whenNotPaused returns (bool) {
-        uint256 totalAmount = amount + _fee;
-        _beforeTokenTransfer(sender, recipient, totalAmount);
-        _collect(sender, _fee);
-        _transfer(sender, recipient, amount);
-        return true;
-    }
+    ) private returns (bool) {
+        _release(account, token, amount);
 
-    function burn(uint256 amount) public returns (bool) {
-        _burn(_msgSender(), amount);
+        uint256 convertedAmount = _calculateConversion(token, amount);
+        _mint(account, convertedAmount);
+
         return true;
     }
 

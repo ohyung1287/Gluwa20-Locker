@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/home/osboxes/KRWC-G-1/contracts/abstracts/Convertible.sol": {
-      "lastModificationDate": 1628289781140,
-      "contentHash": "7ce6685503df06f018ed1f8990fe4ea4",
+      "lastModificationDate": 1628544336280,
+      "contentHash": "acfeee0736afc9694703001c03cb1126",
       "sourceName": "contracts/abstracts/Convertible.sol",
       "solcConfig": {
         "version": "0.8.6",
@@ -31,8 +31,7 @@
         "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol",
         "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
         "@openzeppelin/contracts/token/ERC20/IERC20.sol",
-        "../libs/CommonTuples.sol",
-        "../libs/ConversionModels.sol"
+        "../libs/GluwacoinModel.sol"
       ],
       "versionPragmas": [
         ">=0.8.6"
@@ -145,10 +144,10 @@
         "IERC20"
       ]
     },
-    "/home/osboxes/KRWC-G-1/contracts/libs/CommonTuples.sol": {
-      "lastModificationDate": 1628209324416,
-      "contentHash": "434b4d9624334318c23adad92b57d4fb",
-      "sourceName": "contracts/libs/CommonTuples.sol",
+    "/home/osboxes/KRWC-G-1/contracts/libs/GluwacoinModel.sol": {
+      "lastModificationDate": 1628537891856,
+      "contentHash": "7258f5b1da13a5bceea016604d31f9f7",
+      "sourceName": "contracts/libs/GluwacoinModel.sol",
       "solcConfig": {
         "version": "0.8.6",
         "settings": {
@@ -176,46 +175,12 @@
         ">=0.8.6"
       ],
       "artifacts": [
-        "CommonTuples"
-      ]
-    },
-    "/home/osboxes/KRWC-G-1/contracts/libs/ConversionModels.sol": {
-      "lastModificationDate": 1628209315237,
-      "contentHash": "89d1d7a6f1f0911aa58c3e7e8ac4eb8c",
-      "sourceName": "contracts/libs/ConversionModels.sol",
-      "solcConfig": {
-        "version": "0.8.6",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.8.6"
-      ],
-      "artifacts": [
-        "ConversionModels"
+        "GluwacoinModel"
       ]
     },
     "/home/osboxes/KRWC-G-1/contracts/Gluwacoin.sol": {
-      "lastModificationDate": 1628290333110,
-      "contentHash": "4c6c3b033cabcf2cbb0520437bec1342",
+      "lastModificationDate": 1628544722107,
+      "contentHash": "0473e6894e877df49579cd2064fa14c0",
       "sourceName": "contracts/Gluwacoin.sol",
       "solcConfig": {
         "version": "0.8.6",
@@ -242,9 +207,7 @@
       "imports": [
         "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol",
         "./abstracts/ERC20Reservable.sol",
-        "./abstracts/ERC20Pausable.sol",
         "./abstracts/Convertible.sol",
-        "./abstracts/TransactionFee.sol",
         "./abstracts/ETHlessTransfer.sol"
       ],
       "versionPragmas": [
@@ -255,8 +218,8 @@
       ]
     },
     "/home/osboxes/KRWC-G-1/contracts/abstracts/ERC20Reservable.sol": {
-      "lastModificationDate": 1628204178643,
-      "contentHash": "e0a6be8b2848dabf46d49fefbb225a4c",
+      "lastModificationDate": 1628540149672,
+      "contentHash": "8ef6ad95972d47681a9791d6fb9fc5c0",
       "sourceName": "contracts/abstracts/ERC20Reservable.sol",
       "solcConfig": {
         "version": "0.8.6",
@@ -293,81 +256,9 @@
         "ERC20Reservable"
       ]
     },
-    "/home/osboxes/KRWC-G-1/contracts/abstracts/ERC20Pausable.sol": {
-      "lastModificationDate": 1628289987954,
-      "contentHash": "4cbee2b3e9a2c969f690bb5ef3a2b95b",
-      "sourceName": "contracts/abstracts/ERC20Pausable.sol",
-      "solcConfig": {
-        "version": "0.8.6",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol"
-      ],
-      "versionPragmas": [
-        ">=0.8.6"
-      ],
-      "artifacts": [
-        "ERC20Pausable"
-      ]
-    },
-    "/home/osboxes/KRWC-G-1/contracts/abstracts/TransactionFee.sol": {
-      "lastModificationDate": 1628290055755,
-      "contentHash": "e906f2a3f9179d3c4a19dba5d5b19c38",
-      "sourceName": "contracts/abstracts/TransactionFee.sol",
-      "solcConfig": {
-        "version": "0.8.6",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol"
-      ],
-      "versionPragmas": [
-        ">=0.8.6"
-      ],
-      "artifacts": [
-        "TransactionFee"
-      ]
-    },
     "/home/osboxes/KRWC-G-1/contracts/abstracts/ETHlessTransfer.sol": {
-      "lastModificationDate": 1628290633421,
-      "contentHash": "d2dbcb193b46adc085b441bb3b7a27c9",
+      "lastModificationDate": 1628540180749,
+      "contentHash": "3bb9a182275e0ef5f9eba08634ce3412",
       "sourceName": "contracts/abstracts/ETHlessTransfer.sol",
       "solcConfig": {
         "version": "0.8.6",
@@ -444,42 +335,8 @@
         "ERC20Upgradeable"
       ]
     },
-    "/home/osboxes/KRWC-G-1/contracts/libs/GluwacoinModel.sol": {
-      "lastModificationDate": 1628188973583,
-      "contentHash": "427f1a07d2fb2785aae3df0f155a40eb",
-      "sourceName": "contracts/libs/GluwacoinModel.sol",
-      "solcConfig": {
-        "version": "0.8.6",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.8.6"
-      ],
-      "artifacts": [
-        "GluwacoinModel"
-      ]
-    },
     "/home/osboxes/KRWC-G-1/contracts/libs/Validate.sol": {
-      "lastModificationDate": 1628191092833,
+      "lastModificationDate": 1628544408709,
       "contentHash": "c49452746082e34b76fda468e4470481",
       "sourceName": "contracts/libs/Validate.sol",
       "solcConfig": {
@@ -869,6 +726,42 @@
       ],
       "artifacts": [
         "IERC165Upgradeable"
+      ]
+    },
+    "/home/osboxes/KRWC-G-1/contracts/abstracts/ERC20Pausable.sol": {
+      "lastModificationDate": 1628540183197,
+      "contentHash": "a2b6f69ed84e7e463c36b56dbbee0367",
+      "sourceName": "contracts/abstracts/ERC20Pausable.sol",
+      "solcConfig": {
+        "version": "0.8.6",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        ">=0.8.6"
+      ],
+      "artifacts": [
+        "ERC20Pausable"
       ]
     }
   }

@@ -1,0 +1,473 @@
+{
+  "contractName": "GluwacoinModel",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.6+commit.11564f7e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/osboxes/KRWC-G-1/contracts/libs/GluwacoinModel.sol\":\"GluwacoinModel\"},\"evmVersion\":\"berlin\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":1},\"remappings\":[]},\"sources\":{\"/home/osboxes/KRWC-G-1/contracts/libs/GluwacoinModel.sol\":{\"keccak256\":\"0x2664067af1b9efd565054028b2d09ab2216eeff643763a357bab328f39c64be5\",\"urls\":[\"bzz-raw://ef3f303dc3dadf70397613995bd07a6ebac4a660e8dbf09810bdf4df19367314\",\"dweb:/ipfs/Qmcjz91xhrGbG9EhwY2pad2XkukmmTdrMQNjkF1YQcx5ik\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212205d01393b617fc9f99bd8e2ce99a7aef79bf33403208703f3e5c1ae62b03697a264736f6c63430008060033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212205d01393b617fc9f99bd8e2ce99a7aef79bf33403208703f3e5c1ae62b03697a264736f6c63430008060033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "26:550:9:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "26:550:9:-:0;;;;;;;;",
+  "source": "pragma solidity >=0.8.6;\n\nlibrary GluwacoinModel {\n    /**\n     * @dev Enum of the different domains of signature.\n     */\n    enum SigDomain {\n        /*0*/\n        Nothing,\n        /*1*/\n        Burn,\n        /*2*/\n        Mint,\n        /*3*/\n        Transfer,\n        /*4*/\n        Reserve\n    }\n\n    struct AddressUint256Tuple {\n        address addressVal;\n        uint256 uintVal;\n    }\n\n    struct TokenExchangeModel {\n        uint32 rate;\n        /// @dev if the exchange rate = 0.12 the rate  = 12 and decimal place base  = 100\n        uint32 decimalPlaceBase;\n    }\n}\n",
+  "sourcePath": "/home/osboxes/KRWC-G-1/contracts/libs/GluwacoinModel.sol",
+  "ast": {
+    "absolutePath": "/home/osboxes/KRWC-G-1/contracts/libs/GluwacoinModel.sol",
+    "exportedSymbols": {
+      "GluwacoinModel": [
+        2413
+      ]
+    },
+    "id": 2414,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2395,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.8",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:9"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 2413,
+        "linearizedBaseContracts": [
+          2413
+        ],
+        "name": "GluwacoinModel",
+        "nameLocation": "34:14:9",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "GluwacoinModel.SigDomain",
+            "id": 2401,
+            "members": [
+              {
+                "id": 2396,
+                "name": "Nothing",
+                "nameLocation": "166:7:9",
+                "nodeType": "EnumValue",
+                "src": "166:7:9"
+              },
+              {
+                "id": 2397,
+                "name": "Burn",
+                "nameLocation": "197:4:9",
+                "nodeType": "EnumValue",
+                "src": "197:4:9"
+              },
+              {
+                "id": 2398,
+                "name": "Mint",
+                "nameLocation": "225:4:9",
+                "nodeType": "EnumValue",
+                "src": "225:4:9"
+              },
+              {
+                "id": 2399,
+                "name": "Transfer",
+                "nameLocation": "253:8:9",
+                "nodeType": "EnumValue",
+                "src": "253:8:9"
+              },
+              {
+                "id": 2400,
+                "name": "Reserve",
+                "nameLocation": "285:7:9",
+                "nodeType": "EnumValue",
+                "src": "285:7:9"
+              }
+            ],
+            "name": "SigDomain",
+            "nameLocation": "132:9:9",
+            "nodeType": "EnumDefinition",
+            "src": "127:171:9"
+          },
+          {
+            "canonicalName": "GluwacoinModel.AddressUint256Tuple",
+            "id": 2406,
+            "members": [
+              {
+                "constant": false,
+                "id": 2403,
+                "mutability": "mutable",
+                "name": "addressVal",
+                "nameLocation": "349:10:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2406,
+                "src": "341:18:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 2402,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "341:7:9",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2405,
+                "mutability": "mutable",
+                "name": "uintVal",
+                "nameLocation": "377:7:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2406,
+                "src": "369:15:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2404,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "369:7:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "AddressUint256Tuple",
+            "nameLocation": "311:19:9",
+            "nodeType": "StructDefinition",
+            "scope": 2413,
+            "src": "304:87:9",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "GluwacoinModel.TokenExchangeModel",
+            "id": 2412,
+            "members": [
+              {
+                "constant": false,
+                "id": 2408,
+                "mutability": "mutable",
+                "name": "rate",
+                "nameLocation": "440:4:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2412,
+                "src": "433:11:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 2407,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "433:6:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2411,
+                "mutability": "mutable",
+                "name": "decimalPlaceBase",
+                "nameLocation": "551:16:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2412,
+                "src": "544:23:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 2410,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "544:6:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "TokenExchangeModel",
+            "nameLocation": "404:18:9",
+            "nodeType": "StructDefinition",
+            "scope": 2413,
+            "src": "397:177:9",
+            "visibility": "public"
+          }
+        ],
+        "scope": 2414,
+        "src": "26:550:9",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:577:9"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/osboxes/KRWC-G-1/contracts/libs/GluwacoinModel.sol",
+    "exportedSymbols": {
+      "GluwacoinModel": [
+        2413
+      ]
+    },
+    "id": 2414,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2395,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.8",
+          ".6"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:9"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 2413,
+        "linearizedBaseContracts": [
+          2413
+        ],
+        "name": "GluwacoinModel",
+        "nameLocation": "34:14:9",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "GluwacoinModel.SigDomain",
+            "id": 2401,
+            "members": [
+              {
+                "id": 2396,
+                "name": "Nothing",
+                "nameLocation": "166:7:9",
+                "nodeType": "EnumValue",
+                "src": "166:7:9"
+              },
+              {
+                "id": 2397,
+                "name": "Burn",
+                "nameLocation": "197:4:9",
+                "nodeType": "EnumValue",
+                "src": "197:4:9"
+              },
+              {
+                "id": 2398,
+                "name": "Mint",
+                "nameLocation": "225:4:9",
+                "nodeType": "EnumValue",
+                "src": "225:4:9"
+              },
+              {
+                "id": 2399,
+                "name": "Transfer",
+                "nameLocation": "253:8:9",
+                "nodeType": "EnumValue",
+                "src": "253:8:9"
+              },
+              {
+                "id": 2400,
+                "name": "Reserve",
+                "nameLocation": "285:7:9",
+                "nodeType": "EnumValue",
+                "src": "285:7:9"
+              }
+            ],
+            "name": "SigDomain",
+            "nameLocation": "132:9:9",
+            "nodeType": "EnumDefinition",
+            "src": "127:171:9"
+          },
+          {
+            "canonicalName": "GluwacoinModel.AddressUint256Tuple",
+            "id": 2406,
+            "members": [
+              {
+                "constant": false,
+                "id": 2403,
+                "mutability": "mutable",
+                "name": "addressVal",
+                "nameLocation": "349:10:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2406,
+                "src": "341:18:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 2402,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "341:7:9",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2405,
+                "mutability": "mutable",
+                "name": "uintVal",
+                "nameLocation": "377:7:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2406,
+                "src": "369:15:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 2404,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "369:7:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "AddressUint256Tuple",
+            "nameLocation": "311:19:9",
+            "nodeType": "StructDefinition",
+            "scope": 2413,
+            "src": "304:87:9",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "GluwacoinModel.TokenExchangeModel",
+            "id": 2412,
+            "members": [
+              {
+                "constant": false,
+                "id": 2408,
+                "mutability": "mutable",
+                "name": "rate",
+                "nameLocation": "440:4:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2412,
+                "src": "433:11:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 2407,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "433:6:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 2411,
+                "mutability": "mutable",
+                "name": "decimalPlaceBase",
+                "nameLocation": "551:16:9",
+                "nodeType": "VariableDeclaration",
+                "scope": 2412,
+                "src": "544:23:9",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint32",
+                  "typeString": "uint32"
+                },
+                "typeName": {
+                  "id": 2410,
+                  "name": "uint32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "544:6:9",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint32",
+                    "typeString": "uint32"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "TokenExchangeModel",
+            "nameLocation": "404:18:9",
+            "nodeType": "StructDefinition",
+            "scope": 2413,
+            "src": "397:177:9",
+            "visibility": "public"
+          }
+        ],
+        "scope": 2414,
+        "src": "26:550:9",
+        "usedErrors": []
+      }
+    ],
+    "src": "0:577:9"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.6+commit.11564f7e.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.4",
+  "updatedAt": "2021-08-11T01:21:12.548Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}
