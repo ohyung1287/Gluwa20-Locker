@@ -144,9 +144,7 @@ abstract contract ERC20Reservable is Initializable, ERC20Upgradeable {
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override (ERC20Upgradeable) {
-        
-        require(_unreservedBalance(from) >= amount, "ERC20Reservable: transfer amount exceeds unreserved balance");      
-
+        require(_unreservedBalance(from) >= amount, "ERC20Reservable: transfer amount exceeds unreserved balance");  
         super._beforeTokenTransfer(from, to, amount);
     }
 
