@@ -3,7 +3,7 @@ var Web3 = require('web3');
 var web3 = new Web3(Web3.givenProvider);
 
 module.exports = {
-    sign: function (domain, chainId, contractAddress, sourceAddress, sourcePrivateKey, recipientAddress, amount, fee, nonce, expiryBlockNum) {
+    signReserve: function (domain, chainId, contractAddress, sourceAddress, sourcePrivateKey, recipientAddress, amount, fee, nonce, expiryBlockNum) {
         var hash = web3.utils.soliditySha3(
             { t: 'uint8', v: domain },
             { t: 'uint256', v: chainId },

@@ -87,7 +87,7 @@ contract Gluwacoin is
         _mint(account, convertedAmount);
 
         return true;
-    }
+    }  
 
     /** @dev check the amount of available tokens of sender to transfer.
      * Must override all the parent's functions

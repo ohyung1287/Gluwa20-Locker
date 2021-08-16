@@ -47,14 +47,14 @@ contract ETHlessTransfer is
      * - the `sender` must have a balance of at least the sum of `amount` and `fee`.
      * - the `nonce` is only used once per `sender`.
      */
-    function _transfer(
+    function transfer(
         address sender,
         address recipient,
         uint256 amount,
         uint256 fee,
         uint256 nonce,
         bytes calldata sig
-    ) internal virtual returns (bool success) {
+    ) public virtual returns (bool success) {
         uint256 senderBalance = balanceOf(sender);
         require(
             senderBalance >= (amount + fee),
