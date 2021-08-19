@@ -86,7 +86,7 @@ abstract contract ERC20Reservable is Initializable, ERC20Upgradeable {
         uint256 total = amount + fee;
         require(_unreservedBalance(sender) >= total, "ERC20Reservable: insufficient unreserved balance");
 
-        bytes32 hash = keccak256(abi.encodePacked(GluwacoinModel.SigDomain.Reserve, block.chainid, address(this), sender, recipient, amount, fee, nonce, expiryBlockNum));
+        bytes32 hash = keccak256(abi.encodePacked(GluwacoinModel.SigDomain.Reserve, block.chainid, address(this), sender, recipient, executor, amount, fee, nonce, expiryBlockNum));
         Validate._validateSignature(hash, sender, sig);
 
         _reserved[sender][nonce] = Reservation(amount, fee, recipient, executor, expiryBlockNum,

@@ -14,8 +14,8 @@ const transferAmount = new BN('120000');
 const transferFee = new BN('31');
 const reserveFee = new BN('59');
 
-const [deployer, user1, user2, user3] = accounts;
-const [deployer_privateKey, user1_privateKey, user2_privateKey, user3_privateKey] = privateKeys;
+const [deployer, user1, user2, user3, user4] = accounts;
+const [deployer_privateKey, user1_privateKey, user2_privateKey, user3_privateKey, user4_privateKey] = privateKeys;
 
 describe('Gluwacoin ERC20 Basic test with Conversion', function () {
 
@@ -85,10 +85,10 @@ describe('Gluwacoin ERC20 Basic test with Conversion', function () {
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('100'));
-        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, transferAmount, reserveFee, nonce, expiryBlockNum);
-
+        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
+        
         await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
-    
+        
         var reserve = await gluwacoin.getReservation(deployer, nonce);
 
         expect(reserve.amount).to.be.bignumber.equal(transferAmount);
@@ -99,12 +99,105 @@ describe('Gluwacoin ERC20 Basic test with Conversion', function () {
         expect(reserve.status.toString()).to.equal("1");
     });
 
-    it('Insufficient transfer amount', async function () {
+    it('Reclaim reserved token', async function () {
         await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken);
 
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('100'));
+        console.info(expiryBlockNum);
+        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
+        
+        await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
+        expect(await gluwacoin.reservedBalanceOf(deployer)).to.be.bignumber.equal(transferAmount.add(reserveFee));
+        expect(await gluwacoin.unreservedBalanceOf(deployer)).to.be.bignumber.equal(convertAmount.sub(transferAmount.add(reserveFee)));
+
+     
+        await gluwacoin.reclaim(deployer, nonce, { from: user3 });
+
+        var reserve = await gluwacoin.getReservation(deployer, nonce);
+        expect(reserve.amount).to.be.bignumber.equal(transferAmount);
+        expect(reserve.fee).to.be.bignumber.equal(reserveFee);
+        expect(reserve.recipient).to.equal(user2);
+        expect(reserve.executor).to.equal(user3);
+        expect(reserve.expiryBlockNum).to.be.bignumber.equal(expiryBlockNum);
+        expect(reserve.status.toString()).to.equal("2");
+
+        expect(await gluwacoin.reservedBalanceOf(deployer)).to.be.bignumber.equal("0");
+    });
+
+    it('Reclaim reserved token by sender before expiryBlockNum', async function () {
+        await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken);
+
+        var nonce = Date.now();
+        var latestBlock = await time.latestBlock();
+        var expiryBlockNum = latestBlock.add(new BN('100'));
+        console.info(expiryBlockNum);
+        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
+        
+        await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
+        expect(await gluwacoin.reservedBalanceOf(deployer)).to.be.bignumber.equal(transferAmount.add(reserveFee));
+        expect(await gluwacoin.unreservedBalanceOf(deployer)).to.be.bignumber.equal(convertAmount.sub(transferAmount.add(reserveFee)));
+     
+
+        await expectRevert(
+            gluwacoin.reclaim(deployer, nonce, { from: deployer }),
+            'ERC20Reservable: reservation has not expired or you are not the executor and cannot be reclaimed'
+        ); 
+    });
+
+    it('Execute reserved token', async function () {
+        await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken);
+
+        var nonce = Date.now();
+        var latestBlock = await time.latestBlock();
+        var expiryBlockNum = latestBlock.add(new BN('20'));
+        console.info(await time.latestBlock());
+        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
+        
+        await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
+        expect(await gluwacoin.reservedBalanceOf(deployer)).to.be.bignumber.equal(transferAmount.add(reserveFee));
+
+        await gluwacoin.execute(deployer, nonce, { from: deployer });
+
+        var reserve = await gluwacoin.getReservation(deployer, nonce);
+        expect(reserve.amount).to.be.bignumber.equal(transferAmount);
+        expect(reserve.fee).to.be.bignumber.equal(reserveFee);
+        expect(reserve.recipient).to.equal(user2);
+        expect(reserve.executor).to.equal(user3);
+        expect(reserve.expiryBlockNum).to.be.bignumber.equal(expiryBlockNum);
+        expect(reserve.status.toString()).to.equal("3");
+
+        expect(await gluwacoin.reservedBalanceOf(deployer)).to.be.bignumber.equal("0");
+        expect(await gluwacoin.balanceOf(user2)).to.be.bignumber.equal(transferAmount);
+        expect(await gluwacoin.balanceOf(user3)).to.be.bignumber.equal(reserveFee);
+
+    });
+
+    it('Execute reserved token by non-executor or the token owner', async function () {
+        await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken);
+
+        var nonce = Date.now();
+        var latestBlock = await time.latestBlock();
+        var expiryBlockNum = latestBlock.add(new BN('20'));
+        console.info(await time.latestBlock());
+        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
+        
+        await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
+        expect(await gluwacoin.reservedBalanceOf(deployer)).to.be.bignumber.equal(transferAmount.add(reserveFee));
+
+        await expectRevert(
+            gluwacoin.execute(deployer, nonce, { from: user1 }),
+            'ERC20Reservable: this address is not authorized to execute this reservation'
+        );   
+
+    });
+
+    it('Insufficient transfer amount', async function () {
+        await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken);
+
+        var nonce = Date.now();
+        var latestBlock = await time.latestBlock();
         var signature = sign.signTransfer(3, 1, gluwacoin.address, user1, user1_privateKey, user2, convertAmount.sub(transferFee.div(new BN("2"))), transferFee, nonce);
 
         await expectRevert(
@@ -120,7 +213,7 @@ describe('Gluwacoin ERC20 Basic test with Conversion', function () {
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('100'));
-        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, convertAmount, reserveFee, nonce, expiryBlockNum);
+        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, convertAmount, reserveFee, nonce, expiryBlockNum);
 
         await expectRevert(
             gluwacoin.reserve(deployer, user2, user3, convertAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 }),
@@ -135,7 +228,7 @@ describe('Gluwacoin ERC20 Basic test with Conversion', function () {
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('100'));
-        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, transferAmount, reserveFee, nonce, expiryBlockNum);
+        var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
 
         await expectRevert(
             gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, latestBlock.add(new BN('101')), signature, { from: user1 }),

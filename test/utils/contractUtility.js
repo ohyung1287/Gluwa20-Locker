@@ -25,10 +25,12 @@ async function convertToken(account, amount, convertTokenContract, baseTokenCont
     await convertTokenContract.convert(baseTokenContract.address, amount, { from: account });
 }
 
+
 async function initialConvertTokenWithBasicSetup(account, amount, convertTokenContract, baseTokenContract) {
     await convertTokenContract.setTokenExchange(baseTokenContract.address, new BN("18"), new BN("1"), new BN("1"), { from: account });
     await convertToken(account, amount, convertTokenContract, baseTokenContract);
 }
+
 
 
 module.exports = { deployGluwacoin, deployERC20, convertToken, initialConvertTokenWithBasicSetup};

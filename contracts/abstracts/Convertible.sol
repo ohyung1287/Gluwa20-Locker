@@ -105,7 +105,7 @@ contract Convertible is Initializable, ContextUpgradeable {
         ];
         require(
             rateModel.rate > 0,
-            "Convertible: The base token is not supported."
+            "Convertible: The base token is not supported"
         );
         return
             _decimalConversionFromBaseToken(
