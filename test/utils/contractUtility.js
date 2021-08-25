@@ -32,5 +32,37 @@ async function initialConvertTokenWithBasicSetup(account, amount, convertTokenCo
 }
 
 
+function bigIntAdd(num1,num2)
+{
+    var num_1 = new BN(num1)
+    return num_1.add(new BN(num2));    
+}
 
-module.exports = { deployGluwacoin, deployERC20, convertToken, initialConvertTokenWithBasicSetup};
+function bigIntSub(num1,num2)
+{
+    var num_1 = new BN(num1)
+    return num_1.sub(new BN(num2));    
+}
+
+function bigIntMul(num1,num2)
+{
+    var num_1 = new BN(num1)
+    return num_1.mul(new BN(num2));    
+}
+
+
+function bigIntDiv(num1,num2)
+{
+    var num_1 = new BN(num1)
+    return num_1.div(new BN(num2));    
+}
+
+function decimalConversion(sourceAmount, sourceDecimals,targetDecimals)
+{   
+    var temp = 10**(targetDecimals - sourceDecimals);
+    if (sourceDecimals < targetDecimals)
+        return sourceAmount.mul(new BN(temp));
+    return sourceAmount.div(new BN(temp));
+}
+
+module.exports = { deployGluwacoin, deployERC20, convertToken, initialConvertTokenWithBasicSetup, bigIntAdd, bigIntSub, bigIntMul, bigIntDiv, decimalConversion};

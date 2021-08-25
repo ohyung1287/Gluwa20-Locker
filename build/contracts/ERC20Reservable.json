@@ -14429,7 +14429,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-08-19T02:20:03.820Z",
+  "updatedAt": "2021-08-24T00:55:58.227Z",
   "devdoc": {
     "details": "Extension of {ERC20} that allows users to escrow a transfer. When the fund is reserved, the sender designates an `executor` of the `reserve`. The `executor` can `release` the fund to the pre-defined `recipient` and collect a `fee`. If the `reserve` gets expired without getting executed, the `sender` or the `executor` can `reclaim` the fund back to the `sender`.",
     "kind": "dev",

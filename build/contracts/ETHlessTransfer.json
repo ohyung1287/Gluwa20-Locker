@@ -14887,7 +14887,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-08-19T02:20:03.998Z",
+  "updatedAt": "2021-08-24T00:55:58.280Z",
   "devdoc": {
     "details": "Extension of {ERC20} that allows users to send ETHless transfer by hiring a transaction relayer to pay the gas fee for them. The relayer gets paid in this ERC20 token for `fee`.",
     "kind": "dev",

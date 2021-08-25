@@ -61,7 +61,7 @@ contract Convertible is Initializable, ContextUpgradeable {
     ) internal returns (bool) {
         require(
             _baseTokens[token].rate > 0,
-            "Convertible: The base token is not supported."
+            "Convertible: The base token is not supported"
         );
         
         require(

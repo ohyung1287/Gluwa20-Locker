@@ -17,7 +17,7 @@ const reserveFee = new BN('59');
 const [deployer, user1, user2, user3, user4] = accounts;
 const [deployer_privateKey, user1_privateKey, user2_privateKey, user3_privateKey, user4_privateKey] = privateKeys;
 
-describe('Gluwacoin ERC20 Basic test with Conversion', function () {
+describe('Gluwacoin ERC20 Basic test', function () {
 
     beforeEach(async function () {
         gluwacoin = await contractUtility.deployGluwacoin(deployer);
