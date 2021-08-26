@@ -61,6 +61,18 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         expect(tokenDetails1.rate).to.be.bignumber.equal(new BN("15"));
         expect(tokenDetails1.decimalPlaceBase).to.be.bignumber.equal(new BN("112"));
 
+        try {
+            await gluwacoin.setTokenExchange(baseToken1.address, new BN("18"), new BN("125"), new BN("1212"), { from: user1 });     
+            throw "error";
+        }
+        catch (error) {
+            expect(String(error)).to.contain("AccessControl: account ");
+        }
+
+        var tokenDetails10 = await gluwacoin.getTokenExchangeDetails(baseToken1.address);
+        expect(tokenDetails10.rate).to.be.bignumber.equal(new BN("15"));
+        expect(tokenDetails10.decimalPlaceBase).to.be.bignumber.equal(new BN("112"));
+
         await gluwacoin.grantRole(await gluwacoin.DEFAULT_ADMIN_ROLE(), user1, { from: deployer });
         
         await gluwacoin.setTokenExchange(baseToken1.address, new BN("18"), new BN("25"), new BN("100"), { from: user1 });
@@ -68,6 +80,31 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         expect(tokenDetails2.rate).to.be.bignumber.equal(new BN("25"));
         expect(tokenDetails2.decimalPlaceBase).to.be.bignumber.equal(new BN("100"));
        
+    });
+
+    it('Update token Settings - and convert with new setting', async function () {
+        await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("5")), { from: deployer });
+        await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("2")), { from: user1 });
+        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("2")), { from: deployer });
+        await gluwacoin.convertAllFrom(user1, baseToken1.address, { from: deployer });
+        
+        expect(await baseToken1.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));        
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("2")));
+
+      
+        await gluwacoin.grantRole(await gluwacoin.DEFAULT_ADMIN_ROLE(), user1, { from: deployer });        
+        
+        var rate  = new BN("15");
+        var rateBase = new BN("125");
+        await gluwacoin.setTokenExchange(baseToken1.address, new BN("18"), rate, rateBase, { from: deployer });
+
+        await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("3")), { from: user1 });
+        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("3")), { from: deployer });
+        await gluwacoin.convertAllFrom(user1, baseToken1.address, { from: deployer });
+        
+        expect(await baseToken1.balanceOf(user1)).to.be.bignumber.equal("0");
+        var gluwacoinBalance = transferAmount.mul(new BN("2")).add(transferAmount.mul(new BN("3")).mul(rate).div(rateBase)).toString();
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(gluwacoinBalance);       
     });
 
 

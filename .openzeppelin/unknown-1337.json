@@ -1,0 +1,703 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x70b8A802A2D4CF2FFB896AE3D4812A2d2b60395E",
+    "txHash": "0x02227b18ecaf6b57230b9659376d4d4511aa84dbec8d052dd4ce3a0ef329f674"
+  },
+  "proxies": [
+    {
+      "address": "0x6a642A4D60b90611E038EcA8B80f988cdfb88cEa",
+      "txHash": "0x8ff20c80c20d58e12869a33289c23fd78fb0b96ab8948fc0ee20570db4205b2b",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x22B8BB8B05Ee66b799c31fFB380701a03C671efc",
+      "txHash": "0xe2f1f43b9058a5ee622f8415ddffee19f7129866117a80e11a957d40031a4c55",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5066d7525D8b08b55665b92227C7b895e86b1f14",
+      "txHash": "0xc8d1c9a0e826412c9518d0e1632eb4b70d611064cd5ddca5d31d07797f109916",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x9AFa5A89dd896014cD57699E2da21be7b8b24819",
+      "txHash": "0x2af818c4822651af7937843e846ad518e0bf9ff6f5f9d75d8f2ad597a7383f6e",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xdd65C9C05c1eeB65398E523a9e6bBB906e689b4E",
+      "txHash": "0xb4c1e1c27044442d85449473908fb620e1c333e9ea94d61d858da497dbb58d53",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xF8Aa135DFF1d34D6C1e43B02B8A8c5CdAA3968e6",
+      "txHash": "0x78777ad708080eab02259d091c3303dd11c4c85859207d354a3c02a91017bf8d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x6B738ED0588847e6E018055F74f7E668C22bFEa7",
+      "txHash": "0x16ffa456910b474e95542d8b58c32c36eea10a19ef118b978f12c28dc74339fb",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xc5aC449685d0381eC7732DDac26B77646e763dDE",
+      "txHash": "0x813008ddc84b6cd4cb6c6e95e4c473aa60efd888152ba5987f383d6ce0825a4c",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xd1d7D90741552C1AB7439a13859E6E612Cabd28E",
+      "txHash": "0x31c8360b9e87831c845af7eebd777544be3199cb26a801a19af72e353dd2eb29",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4E3285cdfEC6135C056d0841Edbbbbe7952a2e44",
+      "txHash": "0x1ffbbc65b98f209e5cb21b074961afcb036857d5650a8c773789f22ce09302c0",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "63813675c4d58bc5f60354bd6ac6801299780b9cadbe1d669a4234e1195ed3e5": {
+      "address": "0x89fea62882982bD9A3F40D349ADb2Dc49C7ed439",
+      "txHash": "0x25502d4410c8eebc269a3cff9f871b6c7c090002edfc7d00cbadf56c99c84356",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ContextUpgradeable.sol:29"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)3716_storage)",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlUpgradeable.sol:80"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlUpgradeable.sol:321"
+          },
+          {
+            "contract": "AccessControlEnumerableUpgradeable",
+            "label": "_roleMembers",
+            "type": "t_mapping(t_bytes32,t_struct(AddressSet)1161_storage)",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlEnumerableUpgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlEnumerableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlEnumerableUpgradeable.sol:128"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:40"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:42"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:44"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_name",
+            "type": "t_string_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:46"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_symbol",
+            "type": "t_string_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:47"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:428"
+          },
+          {
+            "contract": "ERC20Reservable",
+            "label": "_reserved",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Reservation)4982_storage))",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Reservable.sol:39"
+          },
+          {
+            "contract": "ERC20Reservable",
+            "label": "_totalReserved",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Reservable.sol:42"
+          },
+          {
+            "contract": "ERC20Reservable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Reservable.sol:285"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_baseTokens",
+            "type": "t_mapping(t_contract(IERC20)1466,t_struct(TokenExchangeModel)7277_storage)",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:13"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_baseTokenDecimals",
+            "type": "t_mapping(t_contract(IERC20)1466,t_uint8)",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:15"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_convertedTokenDecimal",
+            "type": "t_uint8",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:17"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_locks",
+            "type": "t_mapping(t_address,t_mapping(t_contract(IERC20)1466,t_uint256))",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:19"
+          },
+          {
+            "contract": "Convertible",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:203"
+          },
+          {
+            "contract": "ETHlessTransfer",
+            "label": "_usedNonces",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_bool))",
+            "src": "../project:/.coverage_contracts/abstracts/ETHlessTransfer.sol:27"
+          },
+          {
+            "contract": "ETHlessTransfer",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ETHlessTransfer.sol:162"
+          },
+          {
+            "contract": "Gluwacoin",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/Gluwacoin.sol:156"
+          }
+        ],
+        "types": {
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_bool))": {
+            "label": "mapping(address => mapping(uint256 => bool))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_contract(IERC20)1466,t_struct(TokenExchangeModel)7277_storage)": {
+            "label": "mapping(contract IERC20 => struct GluwacoinModel.TokenExchangeModel)"
+          },
+          "t_contract(IERC20)1466": {
+            "label": "contract IERC20"
+          },
+          "t_struct(TokenExchangeModel)7277_storage": {
+            "label": "struct GluwacoinModel.TokenExchangeModel",
+            "members": [
+              {
+                "label": "rate",
+                "type": "t_uint32"
+              },
+              {
+                "label": "decimalPlaceBase",
+                "type": "t_uint32"
+              }
+            ]
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_contract(IERC20)1466,t_uint8)": {
+            "label": "mapping(contract IERC20 => uint8)"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_address,t_mapping(t_contract(IERC20)1466,t_uint256))": {
+            "label": "mapping(address => mapping(contract IERC20 => uint256))"
+          },
+          "t_mapping(t_contract(IERC20)1466,t_uint256)": {
+            "label": "mapping(contract IERC20 => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Reservation)4982_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct ERC20Reservable.Reservation))"
+          },
+          "t_mapping(t_uint256,t_struct(Reservation)4982_storage)": {
+            "label": "mapping(uint256 => struct ERC20Reservable.Reservation)"
+          },
+          "t_struct(Reservation)4982_storage": {
+            "label": "struct ERC20Reservable.Reservation",
+            "members": [
+              {
+                "label": "_amount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "_fee",
+                "type": "t_uint256"
+              },
+              {
+                "label": "_recipient",
+                "type": "t_address"
+              },
+              {
+                "label": "_executor",
+                "type": "t_address"
+              },
+              {
+                "label": "_expiryBlockNum",
+                "type": "t_uint256"
+              },
+              {
+                "label": "_status",
+                "type": "t_enum(ReservationStatus)4968"
+              }
+            ]
+          },
+          "t_enum(ReservationStatus)4968": {
+            "label": "enum ERC20Reservable.ReservationStatus",
+            "members": [
+              "Draft",
+              "Active",
+              "Reclaimed",
+              "Completed"
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_mapping(t_bytes32,t_struct(AddressSet)1161_storage)": {
+            "label": "mapping(bytes32 => struct EnumerableSetUpgradeable.AddressSet)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(AddressSet)1161_storage": {
+            "label": "struct EnumerableSetUpgradeable.AddressSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)890_storage"
+              }
+            ]
+          },
+          "t_struct(Set)890_storage": {
+            "label": "struct EnumerableSetUpgradeable.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)3716_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_struct(RoleData)3716_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    },
+    "8d29f55cd8f1996acf496ee25b506a6c4ef42f800b19404ecfe4ce1e338a9d5b": {
+      "address": "0xeF61e6D1CDAec864f2A35e3d077076A566Fe4Cc7",
+      "txHash": "0x1f0dc6ff8d1c4f907e571c8be6a40abf02c8f8a0b001f4eb61a6bed3c76a755a",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:26"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ContextUpgradeable.sol:29"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)3716_storage)",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlUpgradeable.sol:80"
+          },
+          {
+            "contract": "AccessControlUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlUpgradeable.sol:321"
+          },
+          {
+            "contract": "AccessControlEnumerableUpgradeable",
+            "label": "_roleMembers",
+            "type": "t_mapping(t_bytes32,t_struct(AddressSet)1161_storage)",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlEnumerableUpgradeable.sol:35"
+          },
+          {
+            "contract": "AccessControlEnumerableUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/AccessControlEnumerableUpgradeable.sol:128"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:40"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:42"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:44"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_name",
+            "type": "t_string_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:46"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_symbol",
+            "type": "t_string_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:47"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Upgradeable.sol:428"
+          },
+          {
+            "contract": "ERC20Reservable",
+            "label": "_reserved",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_struct(Reservation)4982_storage))",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Reservable.sol:39"
+          },
+          {
+            "contract": "ERC20Reservable",
+            "label": "_totalReserved",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Reservable.sol:42"
+          },
+          {
+            "contract": "ERC20Reservable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ERC20Reservable.sol:285"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_baseTokens",
+            "type": "t_mapping(t_contract(IERC20)1466,t_struct(TokenExchangeModel)7277_storage)",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:13"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_baseTokenDecimals",
+            "type": "t_mapping(t_contract(IERC20)1466,t_uint8)",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:15"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_convertedTokenDecimal",
+            "type": "t_uint8",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:17"
+          },
+          {
+            "contract": "Convertible",
+            "label": "_locks",
+            "type": "t_mapping(t_address,t_mapping(t_contract(IERC20)1466,t_uint256))",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:19"
+          },
+          {
+            "contract": "Convertible",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/Convertible.sol:203"
+          },
+          {
+            "contract": "ETHlessTransfer",
+            "label": "_usedNonces",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_bool))",
+            "src": "../project:/.coverage_contracts/abstracts/ETHlessTransfer.sol:27"
+          },
+          {
+            "contract": "ETHlessTransfer",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/abstracts/ETHlessTransfer.sol:162"
+          },
+          {
+            "contract": "GluwacoinV0",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../project:/.coverage_contracts/GluwacoinV0.sol:148"
+          }
+        ],
+        "types": {
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_bool))": {
+            "label": "mapping(address => mapping(uint256 => bool))"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_mapping(t_uint256,t_bool)": {
+            "label": "mapping(uint256 => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_contract(IERC20)1466,t_struct(TokenExchangeModel)7277_storage)": {
+            "label": "mapping(contract IERC20 => struct GluwacoinModel.TokenExchangeModel)"
+          },
+          "t_contract(IERC20)1466": {
+            "label": "contract IERC20"
+          },
+          "t_struct(TokenExchangeModel)7277_storage": {
+            "label": "struct GluwacoinModel.TokenExchangeModel",
+            "members": [
+              {
+                "label": "rate",
+                "type": "t_uint32"
+              },
+              {
+                "label": "decimalPlaceBase",
+                "type": "t_uint32"
+              }
+            ]
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_contract(IERC20)1466,t_uint8)": {
+            "label": "mapping(contract IERC20 => uint8)"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_mapping(t_address,t_mapping(t_contract(IERC20)1466,t_uint256))": {
+            "label": "mapping(address => mapping(contract IERC20 => uint256))"
+          },
+          "t_mapping(t_contract(IERC20)1466,t_uint256)": {
+            "label": "mapping(contract IERC20 => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_struct(Reservation)4982_storage))": {
+            "label": "mapping(address => mapping(uint256 => struct ERC20Reservable.Reservation))"
+          },
+          "t_mapping(t_uint256,t_struct(Reservation)4982_storage)": {
+            "label": "mapping(uint256 => struct ERC20Reservable.Reservation)"
+          },
+          "t_struct(Reservation)4982_storage": {
+            "label": "struct ERC20Reservable.Reservation",
+            "members": [
+              {
+                "label": "_amount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "_fee",
+                "type": "t_uint256"
+              },
+              {
+                "label": "_recipient",
+                "type": "t_address"
+              },
+              {
+                "label": "_executor",
+                "type": "t_address"
+              },
+              {
+                "label": "_expiryBlockNum",
+                "type": "t_uint256"
+              },
+              {
+                "label": "_status",
+                "type": "t_enum(ReservationStatus)4968"
+              }
+            ]
+          },
+          "t_enum(ReservationStatus)4968": {
+            "label": "enum ERC20Reservable.ReservationStatus",
+            "members": [
+              "Draft",
+              "Active",
+              "Reclaimed",
+              "Completed"
+            ]
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_mapping(t_bytes32,t_struct(AddressSet)1161_storage)": {
+            "label": "mapping(bytes32 => struct EnumerableSetUpgradeable.AddressSet)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(AddressSet)1161_storage": {
+            "label": "struct EnumerableSetUpgradeable.AddressSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)890_storage"
+              }
+            ]
+          },
+          "t_struct(Set)890_storage": {
+            "label": "struct EnumerableSetUpgradeable.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)3716_storage)": {
+            "label": "mapping(bytes32 => struct AccessControlUpgradeable.RoleData)"
+          },
+          "t_struct(RoleData)3716_storage": {
+            "label": "struct AccessControlUpgradeable.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_mapping(t_address,t_bool)"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          }
+        }
+      }
+    }
+  }
+}

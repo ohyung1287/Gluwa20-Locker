@@ -105,7 +105,6 @@ describe('Gluwacoin ERC20 Basic test', function () {
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('100'));
-        console.info(expiryBlockNum);
         var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
         
         await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
@@ -132,7 +131,6 @@ describe('Gluwacoin ERC20 Basic test', function () {
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('100'));
-        console.info(expiryBlockNum);
         var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
         
         await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
@@ -152,7 +150,6 @@ describe('Gluwacoin ERC20 Basic test', function () {
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('20'));
-        console.info(await time.latestBlock());
         var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
         
         await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
@@ -180,7 +177,6 @@ describe('Gluwacoin ERC20 Basic test', function () {
         var nonce = Date.now();
         var latestBlock = await time.latestBlock();
         var expiryBlockNum = latestBlock.add(new BN('20'));
-        console.info(await time.latestBlock());
         var signature = sign.signReserve(4, 1, gluwacoin.address, deployer, deployer_privateKey, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum);
         
         await gluwacoin.reserve(deployer, user2, user3, transferAmount, reserveFee, nonce, expiryBlockNum, signature, { from: user1 });
