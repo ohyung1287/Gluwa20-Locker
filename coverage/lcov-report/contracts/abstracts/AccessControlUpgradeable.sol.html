@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">25% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>5/20</span>
+        <span class='fraction'>0/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">12.5% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>1/8</span>
+        <span class='fraction'>0/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">23.08% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>3/13</span>
+        <span class='fraction'>0/13</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">23.81% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>5/21</span>
+        <span class='fraction'>0/21</span>
       </div>
     </div>
   </div>
@@ -428,7 +428,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -527,7 +527,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -541,9 +541,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -683,8 +683,8 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable,
     /**
      * @dev Returns `true` if `account` has been granted `role`.
      */
-    function hasRole(bytes32 role, address account) public view override returns (bool) {
-        return _roles[role].members[account];
+<span class="fstat-no" title="function not covered" >    function hasRole(bytes32 role, address account) public view override returns (bool) {</span>
+<span class="cstat-no" title="statement not covered" >        return _roles[role].members[account];</span>
     }
 &nbsp;
     /**
@@ -782,8 +782,8 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable,
      * system imposed by {AccessControl}.
      * ====
      */
-    function _setupRole(bytes32 role, address account) internal virtual {
-        _grantRole(role, account);
+<span class="fstat-no" title="function not covered" >    function _setupRole(bytes32 role, address account) internal virtual {</span>
+<span class="cstat-no" title="statement not covered" >        _grantRole(role, account)</span>;
     }
 &nbsp;
     /**
@@ -796,10 +796,10 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable,
 <span class="cstat-no" title="statement not covered" >        _roles[role].adminRole = adminRole</span>;
     }
 &nbsp;
-    function _grantRole(bytes32 role, address account) private {
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (!hasRole(role, account)) {
-            _roles[role].members[account] = true;
-            emit RoleGranted(role, account, _msgSender());
+<span class="fstat-no" title="function not covered" >    function _grantRole(bytes32 role, address account) private {</span>
+<span class="cstat-no" title="statement not covered" >        if (!hasRole(role, account)) {</span>
+<span class="cstat-no" title="statement not covered" >            _roles[role].members[account] = true</span>;
+<span class="cstat-no" title="statement not covered" >            emit RoleGranted(role, account, _msgSender());</span>
         }
     }
 &nbsp;
@@ -817,7 +817,7 @@ abstract contract AccessControlUpgradeable is Initializable, ContextUpgradeable,
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Aug 25 2021 22:04:12 GMT-0400 (Eastern Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 30 2021 19:44:25 GMT-0400 (Eastern Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

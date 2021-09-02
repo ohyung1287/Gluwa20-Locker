@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.6;
+pragma solidity >=0.8.7;
 
-import "./ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "../libs/GluwacoinModel.sol";
+import "../libs/GluwacoinModels.sol";
+
 import "../libs/Validate.sol";
 
 /**
@@ -35,7 +36,16 @@ abstract contract ERC20Reservable is Initializable, ERC20Upgradeable {
     mapping (address => mapping(uint256 => Reservation)) private _reserved;
 
     // Total amount of reserved balance for address
-    mapping (address => uint256) private _totalReserved; 
+    mapping (address => uint256) private _totalReserved;
+
+    function __ERC20Reservable_init(string memory name, string memory symbol) internal
+    initializer {
+        __ERC20_init_unchained(name, symbol);
+        __ERC20Reservable_init_unchained();
+    }
+
+    function __ERC20Reservable_init_unchained() internal initializer {
+    }
 
     function getReservation(address sender, uint256 nonce) external view
         returns (
@@ -86,7 +96,7 @@ abstract contract ERC20Reservable is Initializable, ERC20Upgradeable {
         uint256 total = amount + fee;
         require(_unreservedBalance(sender) >= total, "ERC20Reservable: insufficient unreserved balance");
 
-        bytes32 hash = keccak256(abi.encodePacked(GluwacoinModel.SigDomain.Reserve, block.chainid, address(this), sender, recipient, executor, amount, fee, nonce, expiryBlockNum));
+        bytes32 hash = keccak256(abi.encodePacked(GluwacoinModels.SigDomain.Reserve, block.chainid, address(this), sender, recipient, executor, amount, fee, nonce, expiryBlockNum));
         Validate._validateSignature(hash, sender, sig);
 
         _reserved[sender][nonce] = Reservation(amount, fee, recipient, executor, expiryBlockNum,
@@ -145,8 +155,9 @@ abstract contract ERC20Reservable is Initializable, ERC20Upgradeable {
 
     function _beforeTokenTransfer(address from, address to, uint256 amount) internal virtual override (ERC20Upgradeable) {
         if (from != address(0)) {
-            require(_unreservedBalance(from) >= amount, "ERC20Reservable: transfer amount exceeds unreserved balance");      
+            require(_unreservedBalance(from) >= amount, "ERC20Reservable: transfer amount exceeds unreserved balance");
         }
+
         super._beforeTokenTransfer(from, to, amount);
     }
 

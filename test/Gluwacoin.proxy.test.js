@@ -19,9 +19,11 @@ describe('Gluwacoin Proxy', function () {
     const symbol = 'KRWCG';
 
     beforeEach(async function () {
+        var baseToken1 = await contractUtility.deployERC20(deployer);
+
         this.token = await deployProxy(
             Gluwacoin,
-            [name, symbol],
+            [baseToken1.address, name, symbol],
             { from: deployer, initializer: 'initialize' }
         );
     });
@@ -33,15 +35,11 @@ describe('Gluwacoin Proxy', function () {
     });
 
     it('retrieve returns a value previously initialized after an upgrade', async function () {
-        var baseToken1 = await contractUtility.deployERC20(deployer);
-
         const newToken = await upgradeProxy(
             this.token.address, GluwacoinV0, { from: deployer });
-
-        console.info(await newToken.DEFAULT_ADMIN_ROLE_V0());
         
         try {
-            await newToken.setTokenExchange(baseToken1.address, new BN("18"), new BN("1"), new BN("1"), { from: deployer });
+            await newToken.setTokenExchange(new BN("1"), new BN("1"), { from: deployer });
             throw "error";
         }
         catch (error) {

@@ -6,9 +6,9 @@ const ERC20Contract = contract.fromArtifact('ERC20Contract');
 const mintAmount = new BN('10000000000000000000000000');
 
 
-async function deployGluwacoin(deployer) {
+async function deployGluwacoin(deployer, convertTokenAddress) {
     const instance = await Gluwacoin.new();
-    await instance.initialize("KRWC-G1 Coin", "KRWC-G1", { from: deployer });
+    await instance.initialize(convertTokenAddress, "KRWC-G1 Coin", "KRWC-G1", { from: deployer });
     return instance;
 
 }
@@ -21,13 +21,12 @@ async function deployERC20(deployer) {
 
 async function convertToken(account, amount, convertTokenContract, baseTokenContract) {
     await baseTokenContract.approve(convertTokenContract.address, amount, { from: account });
-    await convertTokenContract.lock(baseTokenContract.address, amount, { from: account });
-    await convertTokenContract.convert(baseTokenContract.address, amount, { from: account });
+    await convertTokenContract.methods['mint(uint256)'](amount, { from: account });
 }
 
 
 async function initialConvertTokenWithBasicSetup(account, amount, convertTokenContract, baseTokenContract) {
-    await convertTokenContract.setTokenExchange(baseTokenContract.address, new BN("18"), new BN("1"), new BN("1"), { from: account });
+    await convertTokenContract.setTokenExchange(new BN("1"), new BN("1"), { from: account });
     await convertToken(account, amount, convertTokenContract, baseTokenContract);
 }
 

@@ -20,8 +20,9 @@ const [deployer_privateKey, user1_privateKey, user2_privateKey, user3_privateKey
 describe('Gluwacoin ERC20 Basic test', function () {
 
     beforeEach(async function () {
-        gluwacoin = await contractUtility.deployGluwacoin(deployer);
         baseToken = await contractUtility.deployERC20(deployer);
+        gluwacoin = await contractUtility.deployGluwacoin(deployer, baseToken.address);
+
     });
 
     it('check token settings', async function () {

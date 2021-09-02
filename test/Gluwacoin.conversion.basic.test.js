@@ -21,10 +21,10 @@ const [deployer_privateKey, user1_privateKey, user2_privateKey, user3_privateKey
 describe('Gluwacoin ERC20 Basic test with Conversion for currency having the same decimals', function () {
 
     beforeEach(async function () {
-        gluwacoin = await contractUtility.deployGluwacoin(deployer);
         baseToken1 = await contractUtility.deployERC20(deployer);
         baseToken2 = await contractUtility.deployERC20(deployer);
-        await gluwacoin.setTokenExchange(baseToken1.address, new BN("18"), new BN("1"), new BN("1"), { from: deployer });
+        gluwacoin = await contractUtility.deployGluwacoin(deployer, baseToken1.address);
+        await gluwacoin.setTokenExchange(new BN("1"), new BN("1"), { from: deployer });
     });
 
     it('Basic conversion by user', async function () {
@@ -50,10 +50,9 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken1);
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("3")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("3")), { from: user1 });
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("3")), { from: deployer });
-        await gluwacoin.convertFrom(user1, baseToken1.address, transferAmount.mul(new BN("2")), { from: deployer });
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("2")), new BN("0"), { from: deployer });
 
-        expect(await baseToken1.balanceOf(user1)).to.be.bignumber.equal("0");
+        expect(await baseToken1.balanceOf(user1)).to.be.bignumber.equal(transferAmount);
         expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("2")).toString());
     });
 
@@ -62,20 +61,19 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken1);
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("3")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("3")), { from: user1 });
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("3")), { from: deployer });
-        await gluwacoin.convertAllFrom(user1, baseToken1.address, { from: deployer });
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("3")), new BN("0"), { from: deployer });
 
         expect(await baseToken1.balanceOf(user1)).to.be.bignumber.equal("0");
         expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("3")).toString());
     });
 
-    it('Colltroled lock - no access right', async function () {
+    it('Colltroled mint - no access right', async function () {
         await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken1);
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("3")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("3")), { from: user1 });
 
         try {
-            await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("3")), { from: user2 });
+            await gluwacoin.mint(user1, transferAmount.mul(new BN("3")), new BN("0"), { from: user2 });
             throw "error";
         }
         catch (error) {
@@ -89,7 +87,7 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("3")), { from: user1 });
 
         try {
-            await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("5")), { from: deployer });
+            await gluwacoin.mint(user1, transferAmount.mul(new BN("5")), new BN("0"), { from: deployer });
             throw "error";
         }
         catch (error) {
@@ -102,14 +100,17 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("5")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("5")), { from: user1 });
 
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount, { from: deployer });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount);
+        await gluwacoin.mint(user1, transferAmount, new BN("0"), { from: deployer });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount);
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount);
 
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("2")), { from: deployer });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("2")), new BN("0"), { from: deployer });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
 
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("2")), { from: deployer });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("2")), new BN("0"), { from: deployer });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
     });
 
     it('Lock - multiple locks within approved amount', async function () {
@@ -117,14 +118,18 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("5")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("5")), { from: user1 });
 
-        await gluwacoin.lock(baseToken1.address, transferAmount, { from: user1 });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount);
+        await gluwacoin.methods['mint(uint256)'](transferAmount, { from: user1 });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount);
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount);
 
-        await gluwacoin.lock(baseToken1.address, transferAmount.mul(new BN("2")), { from: user1 });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
 
-        await gluwacoin.lock(baseToken1.address, transferAmount.mul(new BN("2")), { from: user1 });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        await gluwacoin.methods['mint(uint256)'](transferAmount.mul(new BN("2")), { from: user1 });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
+
+        await gluwacoin.methods['mint(uint256)'](transferAmount.mul(new BN("2")), { from: user1 });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
     });
 
     it('Withdraw locked amount', async function () {
@@ -132,32 +137,36 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("5")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("5")), { from: user1 });
 
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("5")), { from: deployer });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        await gluwacoin.methods['mint(uint256)'](transferAmount.mul(new BN("5")), { from: user1 });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("5")).toString());
 
-        await gluwacoin.withdraw(baseToken1.address, transferAmount.mul(new BN("2")), { from: user1 });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
+        await gluwacoin.methods['burn(uint256)'](transferAmount.mul(new BN("2")), { from: user1 });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
 
-        await gluwacoin.withdraw(baseToken1.address, transferAmount.mul(new BN("2")), { from: user1 });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount);
+        await gluwacoin.methods['burn(uint256)'](transferAmount.mul(new BN("2")), { from: user1 });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount);
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount);
+
     });
 
-    it('Withdraw partial and convert the remaining', async function () {
+    it('Controlled Withdraw - locked amount', async function () {
         await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken1);
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("5")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("5")), { from: user1 });
+        
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("5")), new BN("0"), { from: deployer });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("5")).toString());
 
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("5")), { from: deployer });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+        await gluwacoin.methods['burn(address,uint256,uint256)'](user1, transferAmount.mul(new BN("2")), new BN("0"),  { from: deployer });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
 
-        await gluwacoin.withdraw(baseToken1.address, transferAmount.mul(new BN("2")), { from: user1 });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("3")));
-
-        await gluwacoin.convert(baseToken1.address, transferAmount.mul(new BN("2")), { from: user1 });
-        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("2")).toString());
-
-        await gluwacoin.convertAllFrom(user1, baseToken1.address, { from: deployer });
-        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount.mul(new BN("3")).toString());   
+        await gluwacoin.methods['burn(address,uint256,uint256)'](user1, transferAmount.mul(new BN("2")), new BN("0"),  { from: deployer });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount);
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(transferAmount); 
     });
 
 
@@ -166,11 +175,12 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("5")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("5")), { from: user1 });
 
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("2")), { from: deployer });
-        expect(await gluwacoin.getLocked(user1, baseToken1.address)).to.be.bignumber.equal(transferAmount.mul(new BN("2")));
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("5")), new BN("0"), { from: deployer });
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("5")));
+
 
         try {
-            await gluwacoin.withdraw(baseToken1.address, transferAmount.mul(new BN("3")), { from: user1 });
+            await gluwacoin.methods['burn(address,uint256,uint256)'](user1, transferAmount.mul(new BN("7")), new BN("0"),  { from: deployer });
             throw "error";
         }
         catch (error) {
@@ -181,21 +191,40 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
     it('Colltroled lock - lock unsupported token', async function () {
         await baseToken2.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("5")), { from: deployer });
         await baseToken2.approve(gluwacoin.address, transferAmount.mul(new BN("5")), { from: user1 });
-
-        await expectRevert(
-            gluwacoin.lockFrom(user1, baseToken2.address, transferAmount, { from: deployer }),
-            'Convertible: The base token is not supported'
-        ); 
+      
+        try {
+            await gluwacoin.mint(user1, transferAmount.mul(new BN("3")), new BN("0"), { from: deployer });
+            throw "error";
+        }
+        catch (error) {
+            expect(String(error)).to.contain("revert");
+        }
     });
 
-    it('Colltroled conversion - full amount - no access right', async function () {
+    it('Colltroled conversion - no access right', async function () {
         await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken1);
         await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("3")), { from: deployer });
         await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("2")), { from: user1 });
-        await gluwacoin.lockFrom(user1, baseToken1.address, transferAmount.mul(new BN("2")), { from: deployer });
        
         try {
-            await gluwacoin.convertAllFrom(user1, baseToken1.address, { from: user2 });
+            await gluwacoin.mint(user1, transferAmount.mul(new BN("2")), new BN("0"), { from: user2 });
+            throw "error";
+        }        
+        catch (error) {
+            expect(String(error)).to.contain("AccessControl: account ");
+        }
+    });
+
+
+    it('Colltroled burn - no access right', async function () {
+        await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken1);
+        await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("3")), { from: deployer });
+        await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("2")), { from: user1 });
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("2")), new BN("0"), { from: deployer });
+
+       
+        try {
+            await gluwacoin.methods['burn(address,uint256,uint256)'](user1, transferAmount.mul(new BN("2")), new BN("0"),  { from: user2 });
             throw "error";
         }
         catch (error) {
@@ -203,5 +232,19 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the sam
         }
     });
 
+    it('Colltroled burn - no access right self convert', async function () {
+        await contractUtility.initialConvertTokenWithBasicSetup(deployer, convertAmount, gluwacoin, baseToken1);
+        await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("3")), { from: deployer });
+        await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("2")), { from: user1 });
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("2")), new BN("0"), { from: deployer });
+
+        try {
+            await gluwacoin.methods['burn(address,uint256,uint256)'](user1, transferAmount.mul(new BN("7")), new BN("0"),  { from: user1 });
+            throw "error";
+        }
+        catch (error) {
+            expect(String(error)).to.contain("AccessControl: account ");
+        }
+    });
 
 });
