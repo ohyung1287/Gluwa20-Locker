@@ -104,7 +104,33 @@ describe('Gluwacoin ERC20 Basic test with Conversion for currency having the dif
         expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal("0");
     });
 
-    
+    it('Colltroled burn - more than locked - with fee', async function () {
+       
+        await baseToken1.methods['transfer(address,uint256)'](user1, transferAmount.mul(new BN("3")), { from: deployer });
+        await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("3")), { from: user1 });
+        await gluwacoin.mint(user1, transferAmount.mul(new BN("3")), new BN("300000"), { from: deployer });
+
+        await baseToken1.methods['transfer(address,uint256)'](user2, transferAmount.mul(new BN("5")), { from: deployer });
+        await baseToken1.approve(gluwacoin.address, transferAmount.mul(new BN("5")), { from: user2 });
+        await gluwacoin.mint(user2, transferAmount.mul(new BN("5")), new BN("800000"), { from: deployer });
+
+        expect(await baseToken1.balanceOf(user1)).to.be.bignumber.equal("0");
+        var gluwacoinBalance = transferAmount.mul(new BN("3")).sub(new BN("300000")).mul(rate).div(rateBase);
+        var gluwacoinBalanceUser2 = transferAmount.mul(new BN("5")).sub(new BN("800000")).mul(rate).div(rateBase);
+
+        await gluwacoin.methods['transfer(address,uint256)'](user1, gluwacoinBalanceUser2, { from: user2 });
+
+        expect(await gluwacoin.balanceOf(user1)).to.be.bignumber.equal(gluwacoinBalance.add(gluwacoinBalanceUser2));
+
+
+        expect((await gluwacoin.getLockerByAcccount(user1)).amount).to.be.bignumber.equal(transferAmount.mul(new BN("3")).sub(new BN("300000")));
+        
+        await expectRevert(
+            gluwacoin.methods['burn(address,uint256,uint256)'](user1, gluwacoinBalance.add(gluwacoinBalanceUser2), new BN("59"),  { from: deployer }),
+            "Convertible: Locker does not have enough CTC for withdrawal"
+        );
+        
+    });
 
 
 });

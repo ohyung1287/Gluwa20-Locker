@@ -109,15 +109,15 @@ contract Convertible is Initializable, ContextUpgradeable {
         uint256 amount,
         uint256 fee
     ) internal returns (bool) {
-        bytes32 lockerHash = _lockerOwner[account];
-        require(
-            _locker[lockerHash].amount >= amount,
-            "Convertible: Can't withdraw token from the locker"
-        );
+        bytes32 lockerHash = _lockerOwner[account];        
         uint256 withdrawnAmount = _calculateWithdrawal(
             amount,
             _locker[lockerHash].exchangeRate.rate,
             _locker[lockerHash].exchangeRate.decimalPlaceBase
+        );
+        require(
+            _locker[lockerHash].amount >= withdrawnAmount,
+            "Convertible: Locker does not have enough CTC for withdrawal"
         );
         require(
             withdrawnAmount > fee,
