@@ -1,7 +1,7 @@
 pragma solidity >=0.8.7;
 
-import "@openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
+import "./openzeppelin/contracts-upgradeable/utils/cryptography/ECDSAUpgradeable.sol";
+import "./openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol";
 
 /**
  * @dev Signature verification

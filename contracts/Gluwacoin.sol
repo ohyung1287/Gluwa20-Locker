@@ -1,6 +1,6 @@
 pragma solidity >=0.8.7;
 
-import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import "./openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "./abstracts/ERC20Reservable.sol";
 import "./abstracts/Convertible.sol";
 import "./abstracts/ERC20ETHless.sol";
