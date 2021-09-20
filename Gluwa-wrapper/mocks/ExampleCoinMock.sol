@@ -1,6 +1,6 @@
 pragma solidity ^0.8.6;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "../openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "../ExampleCoin.sol";
 
