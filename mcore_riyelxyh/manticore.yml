@@ -1,0 +1,5 @@
+cli:
+  argv:
+  - Gluwacoin_Verify.sol
+  contract: Gluwacoin
+  skip_reverts: true

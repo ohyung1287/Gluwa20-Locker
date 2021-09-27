@@ -1,0 +1,1 @@
+/home/ethsec/.local/bin/manticore Gluwacoin_Verify.sol --contract Gluwacoin
